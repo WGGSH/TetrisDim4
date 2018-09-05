@@ -12,23 +12,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Title = /** @class */ (function (_super) {
-    __extends(Title, _super);
-    function Title(_game) {
+var Puzzle = /** @class */ (function (_super) {
+    __extends(Puzzle, _super);
+    function Puzzle(_game) {
         return _super.call(this, _game) || this;
     }
-    Title.prototype.initialize = function () {
+    Puzzle.prototype.initialize = function () {
     };
-    Title.prototype.update = function () {
-        if (Input.getKeyDown('A')) {
-            this.game.changeScene(SCENE.PUZZLE);
-        }
+    Puzzle.prototype.update = function () {
     };
-    Title.prototype.draw = function () {
-        fill(255);
-        if (Input.MousePress) {
-            triangle(Input.MousePos.x, Input.MousePos.y, Util.screenWidth(0.5), Util.screenHeight(0.5), Util.screenWidth(0.75), Util.screenHeight(0.75));
-        }
+    Puzzle.prototype.draw = function () {
+        background(255, 255, 255);
     };
-    return Title;
+    return Puzzle;
 }(Scene));

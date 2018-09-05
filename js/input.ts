@@ -6,7 +6,8 @@ class Input{
   private static mousePos: Vec2 = new Vec2(null); // 現在のマウス座標
   private static preMousePos: Vec2 = new Vec2(null); // 直前フレームのマウス座標
   private static clickedPos: Vec2 = new Vec2(null); // 最後にクリックした時のマウス座標
-  private static keyCount: number[] = new Array(256); // 各キーの入力状態
+  private static keyPressCount: number[] = new Array(256); // 各キーが押され続けたフレーム数
+  private static keyReleaseCount: number[] = new Array(256); // 各キーが離され続けたフレーム数
 
   public static update(): void {
     Input.mouseUpdate();
@@ -41,33 +42,37 @@ class Input{
     //   console.log(key);
     // }
 
-    for (let i = 0; i < 256; i++){
-      if (Input.keyCount[i] >= 1) {
-        Input.keyCount[i]++;
-        console.log(i + ":" + Input.keyCount[i]);
+    for (let i = 0; i < 256; i++) {
+      if (Input.keyPressCount[i] >= 1) {
+        Input.keyPressCount[i]++;
+      }
+      if (Input.keyReleaseCount[i] >= 1) {
+        Input.keyReleaseCount[i]++;
       }
     }
 
   }
 
   public static keyPress(_key: string): void{
-    Input.keyCount[_key.charCodeAt(0)] = 1;
+    Input.keyPressCount[_key.charCodeAt(0)] = 1;
+    Input.keyReleaseCount[_key.charCodeAt(0)] = 0;
   }
 
   public static keyRelease(_key: string): void{
-    Input.keyCount[_key.charCodeAt(0)] = 0;
+    Input.keyPressCount[_key.charCodeAt(0)] = 0;
+    Input.keyReleaseCount[_key.charCodeAt(0)] = 1;
   }
 
   static get MouseDown(): boolean{
-    return Input.mousePressCount == 1;
+    return Input.mousePressCount == 2;
   }
 
   static get MousePress(): boolean{
-    return Input.mousePressCount >= 1;
+    return Input.mousePressCount >= 2;
   }
 
   static get MouseUp(): boolean{
-    return Input.mosueReleaseCount == 1;
+    return Input.mosueReleaseCount == 2;
   }
 
   static get MousePos(): Vec2{
@@ -77,6 +82,19 @@ class Input{
   static get PreMousePos(): Vec2{
     return Input.preMousePos;
   }
+
+  public static getKey(_key: string) : boolean{
+    return Input.keyPressCount[_key.charCodeAt(0)] >= 2;
+  }
+
+  public static getKeyDown(_key: string): boolean {
+    return Input.keyPressCount[_key.charCodeAt(0)] == 2;
+  }
+
+  public static getKeyUp(_key: string): boolean{
+    return Input.keyReleaseCount[_key.charCodeAt(0)] == 2;
+  }
+
 }
 
 function keyPressed() {

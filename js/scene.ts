@@ -1,5 +1,5 @@
 class Scene{
-  private game: Game;
+  protected game: Game;
 
   constructor(_game: Game) {
     this.game = _game;
@@ -17,3 +17,9 @@ class Scene{
   }
 
 }
+
+enum SCENE{
+  TITLE,
+  PUZZLE,
+}
+const SCENE_NUM: number = 2;

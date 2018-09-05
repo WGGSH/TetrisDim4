@@ -11,3 +11,9 @@ var Scene = /** @class */ (function () {
     };
     return Scene;
 }());
+var SCENE;
+(function (SCENE) {
+    SCENE[SCENE["TITLE"] = 0] = "TITLE";
+    SCENE[SCENE["PUZZLE"] = 1] = "PUZZLE";
+})(SCENE || (SCENE = {}));
+var SCENE_NUM = 2;

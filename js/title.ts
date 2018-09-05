@@ -8,7 +8,10 @@ class Title extends Scene{
   }
 
   public update(): void{
-    
+
+    if (Input.getKeyDown('A')) {
+      this.game.changeScene(SCENE.PUZZLE);
+    }
   }
 
   public draw(): void{

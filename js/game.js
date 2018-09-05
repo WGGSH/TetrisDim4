@@ -2,15 +2,25 @@
 /// <reference path="p5.global-mode.d.ts" />
 var Game = /** @class */ (function () {
     function Game() {
-        this.sceneList = new Array(1);
-        this.sceneList[0] = new Title(this);
-        this.currentScene = 0;
+        this.sceneList = new Array(SCENE_NUM);
+        this.sceneList[SCENE.TITLE] = new Title(this);
+        this.sceneList[SCENE.PUZZLE] = new Puzzle(this);
+        this.currentScene = SCENE.TITLE;
+        this.nextScene = this.currentScene;
         this.sceneList[this.currentScene].initialize();
     }
     Game.prototype.update = function () {
         background(0);
         this.sceneList[this.currentScene].update();
         this.sceneList[this.currentScene].draw();
+        // シーンが変更されるなら，次のシーンを初期化する
+        if (this.nextScene != this.currentScene) {
+            this.currentScene = this.nextScene;
+            this.sceneList[this.currentScene].initialize();
+        }
+    };
+    Game.prototype.changeScene = function (_scene) {
+        this.nextScene = _scene;
     };
     return Game;
 }());

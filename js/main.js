@@ -1,13 +1,11 @@
 "use strict";
 /// <reference path="p5.global-mode.d.ts" />
 var game;
-var input;
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     window.addEventListener("touchstart", function (event) { event.preventDefault(); }, { passive: false });
     window.addEventListener("touchmove", function (event) { event.preventDefault(); }, { passive: false });
     game = new Game();
-    input = new Input();
 }
 function draw() {
     background(0);
