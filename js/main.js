@@ -1,15 +1,15 @@
 "use strict";
 /// <reference path="p5.global-mode.d.ts" />
 var game;
-var input;
+// var input: Input;
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     game = new Game();
-    input = new Input();
+    // input = new Input();
 }
 function draw() {
     background(0);
     translate(-width / 2, -height / 2);
-    input.update();
+    Input.update();
     game.update();
 }

@@ -13,8 +13,8 @@ class Title extends Scene{
 
   public draw(): void{
     fill(255);
-    if (input.MousePress) {
-      triangle(input.MousePos.x, input.MousePos.y, Util.screenWidth(0.5), Util.screenHeight(0.5), Util.screenWidth(0.75), Util.screenHeight(0.75));
+    if (Input.MousePress) {
+      triangle(Input.MousePos.x, Input.MousePos.y, Util.screenWidth(0.5), Util.screenHeight(0.5), Util.screenWidth(0.75), Util.screenHeight(0.75));
     }
   }
 }

@@ -2,65 +2,95 @@
 /// <reference path="p5.global-mode.d.ts" />
 var Input = /** @class */ (function () {
     function Input() {
-        this.mousePressCount = 0;
-        this.mosueReleaseCount = 0;
-        this.mousePos = new Vec2(null);
-        this.preMousePos = new Vec2(null);
-        this.clickedPos = new Vec2(null);
     }
-    Input.prototype.update = function () {
+    Input.update = function () {
+        Input.mouseUpdate();
+        Input.keyboardUpdate();
+    };
+    // マウス(タップ)の入力状態更新
+    Input.mouseUpdate = function () {
         if (mouseIsPressed) {
-            this.mousePressCount++;
-            this.mosueReleaseCount = 0;
-            if (this.MouseDown) {
+            Input.mousePressCount++;
+            Input.mosueReleaseCount = 0;
+            if (Input.MouseDown) {
                 // クリック時のマウス座標を記録
-                this.clickedPos.x = mouseX;
-                this.clickedPos.y = mouseY;
+                Input.clickedPos.x = mouseX;
+                Input.clickedPos.y = mouseY;
             }
         }
         else {
-            this.mousePressCount = 0;
-            this.mosueReleaseCount++;
+            Input.mousePressCount = 0;
+            Input.mosueReleaseCount++;
         }
-        this.preMousePos.x = this.mousePos.x;
-        this.preMousePos.y = this.mousePos.y;
-        this.mousePos.x = mouseX;
-        this.mousePos.y = mouseY;
+        Input.preMousePos.x = Input.mousePos.x;
+        Input.preMousePos.y = Input.mousePos.y;
+        Input.mousePos.x = mouseX;
+        Input.mousePos.y = mouseY;
     };
-    Object.defineProperty(Input.prototype, "MouseDown", {
+    // キーボードの入力状態更新
+    Input.keyboardUpdate = function () {
+        // if (keyIsPressed) {
+        //   console.log(key);
+        // }
+        for (var i = 0; i < 256; i++) {
+            if (Input.keyCount[i] >= 1) {
+                Input.keyCount[i]++;
+                console.log(i + ":" + Input.keyCount[i]);
+            }
+        }
+    };
+    Input.keyPress = function (_key) {
+        Input.keyCount[_key.charCodeAt(0)] = 1;
+    };
+    Input.keyRelease = function (_key) {
+        Input.keyCount[_key.charCodeAt(0)] = 0;
+    };
+    Object.defineProperty(Input, "MouseDown", {
         get: function () {
-            return this.mousePressCount == 1;
+            return Input.mousePressCount == 1;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Input.prototype, "MousePress", {
+    Object.defineProperty(Input, "MousePress", {
         get: function () {
-            return this.mousePressCount >= 1;
+            return Input.mousePressCount >= 1;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Input.prototype, "MouseUp", {
+    Object.defineProperty(Input, "MouseUp", {
         get: function () {
-            return this.mosueReleaseCount == 1;
+            return Input.mosueReleaseCount == 1;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Input.prototype, "MousePos", {
+    Object.defineProperty(Input, "MousePos", {
         get: function () {
-            return this.mousePos;
+            return Input.mousePos;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(Input.prototype, "PreMousePos", {
+    Object.defineProperty(Input, "PreMousePos", {
         get: function () {
-            return this.preMousePos;
+            return Input.preMousePos;
         },
         enumerable: true,
         configurable: true
     });
+    Input.mousePressCount = 0; // マウスボタンが押され続けたフレーム数
+    Input.mosueReleaseCount = 0; // マウスボタンが離され続けたフレーム数
+    Input.mousePos = new Vec2(null); // 現在のマウス座標
+    Input.preMousePos = new Vec2(null); // 直前フレームのマウス座標
+    Input.clickedPos = new Vec2(null); // 最後にクリックした時のマウス座標
+    Input.keyCount = new Array(256); // 各キーの入力状態
     return Input;
 }());
+function keyPressed() {
+    Input.keyPress(key);
+}
+function keyReleased() {
+    Input.keyRelease(key);
+}
