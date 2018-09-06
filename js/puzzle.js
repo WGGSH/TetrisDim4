@@ -15,7 +15,22 @@ var __extends = (this && this.__extends) || (function () {
 var Puzzle = /** @class */ (function (_super) {
     __extends(Puzzle, _super);
     function Puzzle(_game) {
-        return _super.call(this, _game) || this;
+        var _this = _super.call(this, _game) || this;
+        // フィールドの初期化
+        _this.field = new Array();
+        for (var y = 0; y < Puzzle.STAGE_HEIGHT; y++) {
+            _this.field[y] = new Array(Puzzle.STAGE_WIDTH);
+            for (var w = 0; w < Puzzle.STAGE_WIDTH; w++) {
+                _this.field[y][w] = new Array(Puzzle.STAGE_WIDTH);
+                for (var z = 0; z < Puzzle.STAGE_WIDTH; z++) {
+                    _this.field[y][w][z] = new Array(Puzzle.STAGE_WIDTH);
+                    for (var x = 0; x < Puzzle.STAGE_WIDTH; x++) {
+                        _this.field[y][w][z][x] = 0;
+                    }
+                }
+            }
+        }
+        return _this;
     }
     Puzzle.prototype.initialize = function () {
     };
@@ -24,5 +39,13 @@ var Puzzle = /** @class */ (function (_super) {
     Puzzle.prototype.draw = function () {
         background(255, 255, 255);
     };
+    Puzzle.FIELD_WIDTH = 5; // フィールドの高さ以外の幅
+    Puzzle.STAGE_WIDTH = Puzzle.FIELD_WIDTH + 2;
+    Puzzle.FIELD_HEIGHT = 10; // フィールドの高さ
+    Puzzle.STAGE_HEIGHT = Puzzle.FIELD_HEIGHT + 2;
+    // フィールド内部をループするためのインデックス定数
+    Puzzle.FIELD_INDEX_MIN = 1;
+    Puzzle.FIELD_HEIGHT_INDEX_MAX = Puzzle.FIELD_HEIGHT + 1;
+    Puzzle.FIELD_WIDTH_INDEX_MAX = Puzzle.FIELD_WIDTH + 1;
     return Puzzle;
 }(Scene));
