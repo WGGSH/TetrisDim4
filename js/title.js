@@ -25,10 +25,9 @@ var Title = /** @class */ (function (_super) {
         }
     };
     Title.prototype.draw = function () {
-        fill(255);
-        if (Input.MousePress) {
-            triangle(Input.MousePos.x, Input.MousePos.y, Util.screenWidth(0.5), Util.screenHeight(0.5), Util.screenWidth(0.75), Util.screenHeight(0.75));
-        }
+        fill(255, 0, 0);
+        stroke(255, 0, 0);
+        text('hoge', 240, 240);
     };
     return Title;
 }(Scene));

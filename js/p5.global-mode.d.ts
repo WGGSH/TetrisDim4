@@ -313,6 +313,11 @@ declare var TAU: any;
  */
 declare var TWO_PI: any;
 
+/**
+ * WEBGL
+ */
+declare var WEBGL: any;
+
 // src/core/core.js
 
 /**
@@ -324,14 +329,14 @@ declare function preload(): void;
 /**
  * The setup() function is called once when the program starts.
  */
-declare function setup(): void;
+// declare function setup(): void;
 
 /**
  * Called directly after setup(), the draw() function continuously executes
  * the lines of code contained inside its block until the program is stopped
  * or noLoop() is called.
  */
-declare function draw(): void;
+// declare function draw(): void;
 
 /**
  * Removes the entire p5 sketch.
@@ -761,12 +766,12 @@ declare var keyCode: any;
 /**
  * The keyPressed() function is called once every time a key is pressed.
  */
-declare function keyPressed(): void;
+// declare function keyPressed(): void;
 
 /**
  * The keyReleased() function is called once every time a key is released.
  */
-declare function keyReleased(): void;
+// declare function keyReleased(): void;
 
 /**
  * The keyTyped() function is called once every time a key is pressed, but
@@ -1330,6 +1335,7 @@ declare function textWidth(theText: string): number;
 /**
  * Draws text to the screen.
  */
+declare function text(str: string, x: number, y: number): any;
 declare function text(str: string, x: number, y: number, x2: number, y2: number): any;
 
 /**
