@@ -5,6 +5,7 @@ function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     window.addEventListener("touchstart", function (event) { event.preventDefault(); }, { passive: false });
     window.addEventListener("touchmove", function (event) { event.preventDefault(); }, { passive: false });
+    Block.initialize();
     game = new Game();
 }
 function draw() {
