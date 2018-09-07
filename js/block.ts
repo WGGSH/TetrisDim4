@@ -1,9 +1,9 @@
 class Block{
-  static BLOCK_TYPE_MAX: number = 7; // 降ってくるブロックの種類の総数
-  static BLOCK_WIDTH: number = 4; // 1組のブロックを格納する幅
-  static BLOCK_LIST: number[][][][][]; // ブロックの配置リスト
+  public static BLOCK_WIDTH: number = 4; // 1組のブロックを格納する幅
+  public static BLOCK_TYPE_MAX: number = 7; // 降ってくるブロックの種類の総数
+  public static BLOCK_LIST: number[][][][][]; // ブロックの配置リスト
 
-  static initialize(): void{
+  public static initialize(): void{
     Block.BLOCK_LIST = new Array(Block.BLOCK_TYPE_MAX);
 
     for (let i: number = 0; i < 7; i++){
@@ -66,7 +66,7 @@ class Block{
     Block.BLOCK_LIST[6][1][1][2][2] = 7;
   }
 
-  static blockMethod(_block: number[][][][], method: (_y: number, _w: number, _z: number, _x: number) => any): void{
+  public static blockMethod(_block: number[][][][], method: (_y: number, _w: number, _z: number, _x: number) => any): void{
     for (let y: number = 0; y < Block.BLOCK_WIDTH; y++){
       for (let w: number = 0; w < Block.BLOCK_WIDTH; w++){
         for (let z: number = 0; z < Block.BLOCK_WIDTH; z++){

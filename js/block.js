@@ -70,7 +70,7 @@ var Block = /** @class */ (function () {
             }
         }
     };
-    Block.BLOCK_TYPE_MAX = 7; // 降ってくるブロックの種類の総数
     Block.BLOCK_WIDTH = 4; // 1組のブロックを格納する幅
+    Block.BLOCK_TYPE_MAX = 7; // 降ってくるブロックの種類の総数
     return Block;
 }());

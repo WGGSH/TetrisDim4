@@ -64,43 +64,60 @@ class Puzzle extends Scene {
 
     // ブロックの初期化
     this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
+
+    // カメラの初期化
+    Camera.initialize();
   }
 
   public update(): void {
-    if (Input.getKeyDown('A')) {
-      this.position.x--;
-    }
-    if (Input.getKeyDown('D')) {
-      this.position.x++;
-    }
-    if (Input.getKeyDown('W')) {
-      this.position.z--;
-    }
-    if (Input.getKeyDown('S')) {
-      this.position.z++;
-    }
-    if (Input.getKeyDown('Q')) {
-      this.position.w--;
-    }
-    if (Input.getKeyDown('E')) {
-      this.position.w++;
-    }
-    if (Input.getKeyDown('X')) {
-      this.position.y++;
-    }
-    if (Input.getKeyDown('Z')) {
-      this.position.y--;
-    }
-    if (Input.getKeyDown('C')) {
-      this.setBlock();
-      this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
-      this.fixPosition();
+    // カメラの移動
+    Camera.update();
+
+    if (keyIsPressed) {
+      let prePos: Vec4 = new Vec4(this.position.x, this.position.y, this.position.z, this.position.w);
+      if (Input.getKeyDown('A')) {
+        this.position.x--;
+      }
+      if (Input.getKeyDown('D')) {
+        this.position.x++;
+      }
+      if (Input.getKeyDown('W')) {
+        this.position.z--;
+      }
+      if (Input.getKeyDown('S')) {
+        this.position.z++;
+      }
+      if (Input.getKeyDown('Q')) {
+        this.position.w--;
+      }
+      if (Input.getKeyDown('E')) {
+        this.position.w++;
+      }
+      if (Input.getKeyDown('X')) {
+        this.position.y++;
+      }
+      if (Input.getKeyDown('Z')) {
+        this.position.y--;
+      }
+      if (this.position.equal(prePos) == false) {
+        // 移動先にブロックがある場合,移動を無効化する
+        if (this.collisionBlock(this.position) == true) {
+          this.position.set(prePos.x, prePos.y, prePos.z, prePos.w);
+        }
+      }
+
+      if (Input.getKeyDown('C')) {
+        this.setBlock();
+        this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
+        this.fixPosition();
+      }
     }
 
   }
 
   public draw(): void {
     background(255, 255, 255);
+    // background(0);
     fill(0);
     noStroke();
     // ステージの描画
@@ -119,6 +136,9 @@ class Puzzle extends Scene {
 
     fill(255,0,0);
     rect(this.position.w * (Puzzle.STAGE_WIDTH + 2) * Puzzle.BLOCK_SIZE + this.position.x * Puzzle.BLOCK_SIZE, this.position.z * (Puzzle.STAGE_HEIGHT + 2) * Puzzle.BLOCK_SIZE + this.position.y * Puzzle.BLOCK_SIZE, Puzzle.BLOCK_SIZE - 2, Puzzle.BLOCK_SIZE - 2);
+
+    fill(0, 0, 255);
+    box(30);
   }
 
 
@@ -167,6 +187,29 @@ class Puzzle extends Scene {
   // カーソル位置を初期化
   private fixPosition(): void{
     this.position.set(Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), 0, Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), Math.floor(Puzzle.STAGE_WIDTH / 2 - 1));
+  }
+
+  // ブロックとフィールドの接触判定
+  private collisionBlock(position: Vec4): boolean{
+    let flag: boolean = false;
+    Block.blockMethod(this.currentBlock, (y: number, w: number, z: number, x: number) => {
+      // ブロックのないマスは無視
+      if (this.currentBlock[y][w][z][x] == 0) {
+        return;
+      }
+      // 移動先がフィールド外の場合も無視
+      if (y + position.y < 0 || y + position.y >= Puzzle.STAGE_HEIGHT ||
+        w + position.w < 0 || w + position.w >= Puzzle.STAGE_WIDTH ||
+        z + position.z < 0 || z + position.z >= Puzzle.STAGE_WIDTH ||
+        x + position.x < 0 || x + position.x >= Puzzle.STAGE_WIDTH) {
+        return;
+      }
+
+      if (this.field[y + position.y][w + position.w][z + position.z][x + position.x] != 0) {
+        flag = true;
+      }
+    });
+    return flag;
   }
 
 }

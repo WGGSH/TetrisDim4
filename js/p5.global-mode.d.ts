@@ -41,6 +41,7 @@ declare function torus(radius: number, tubeRadius: number, detail?: number): voi
  * Draw a box with given width, height and depth
  */
 declare function box(width: number, height: number, depth: number): p5;
+declare function box(width: number): p5;
 
 // src/3d/camera.js
 
@@ -48,6 +49,7 @@ declare function box(width: number, height: number, depth: number): p5;
  * Sets camera position
  */
 declare function camera(x: number, y: number, z: number): p5;
+declare function camera(x: number, y: number, z: number, centerX: number, centerY: number, centerZ: number, upX: number, upY: number, upZ: number): p5;
 
 /**
  * Sets perspective camera
@@ -71,6 +73,7 @@ declare function ambientLight(v1: number | any[] | string | p5.Color, v2?: numbe
 //   required param "x" follows an optional param
 //
 // declare function directionalLight(v1: number|any[]|string|p5.Color, v2?: number, v3?: number, a?: number, x: number|p5.Vector, y?: number, z?: number): p5;
+declare function directionalLight(v1: number, v2: number, v3: number, x: number, y: number, z: number): any;
 
 // TODO: Fix pointLight() errors in src/3d/light.js:
 //
