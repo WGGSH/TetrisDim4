@@ -31,4 +31,11 @@ class Vec4{
     this.w = _d;
     return;
   }
+
+  public set(_x:number, _y:number, _z:number, _w:number): void{
+    this.x = _x;
+    this.y = _y;
+    this.z = _z;
+    this.w = _w;
+  }
 }

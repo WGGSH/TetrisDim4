@@ -21,5 +21,11 @@ var Vec4 = /** @class */ (function () {
         this.w = _d;
         return;
     }
+    Vec4.prototype.set = function (_x, _y, _z, _w) {
+        this.x = _x;
+        this.y = _y;
+        this.z = _z;
+        this.w = _w;
+    };
     return Vec4;
 }());
