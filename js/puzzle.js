@@ -30,14 +30,40 @@ var Puzzle = /** @class */ (function (_super) {
                 }
             }
         }
+        _this.position = new Vec4(null);
         return _this;
     }
     Puzzle.prototype.initialize = function () {
     };
     Puzzle.prototype.update = function () {
+        if (Input.getKeyDown('A')) {
+            this.position.x++;
+        }
+        if (Input.getKeyDown('D')) {
+            this.position.x--;
+        }
+        if (Input.getKeyDown('W')) {
+            this.position.z++;
+        }
+        if (Input.getKeyDown('S')) {
+            this.position.z--;
+        }
+        if (Input.getKeyDown('Q')) {
+            this.position.w--;
+        }
+        if (Input.getKeyDown('E')) {
+            this.position.w++;
+        }
+        if (Input.getKeyDown('X')) {
+            this.position.y++;
+        }
     };
     Puzzle.prototype.draw = function () {
         background(255, 255, 255);
+        fill(0);
+        Util.fieldMethod(this.field, function (_y, _w, _z, _x) {
+            rect(_w * Puzzle.STAGE_WIDTH * Puzzle.BLOCK_SIZE + _x * Puzzle.BLOCK_SIZE, _z * Puzzle.STAGE_HEIGHT * Puzzle.BLOCK_SIZE + _y * Puzzle.BLOCK_SIZE, Puzzle.BLOCK_SIZE - 2, Puzzle.BLOCK_SIZE - 2);
+        });
     };
     Puzzle.FIELD_WIDTH = 5; // フィールドの高さ以外の幅
     Puzzle.STAGE_WIDTH = Puzzle.FIELD_WIDTH + 2;
@@ -47,5 +73,6 @@ var Puzzle = /** @class */ (function (_super) {
     Puzzle.FIELD_INDEX_MIN = 1;
     Puzzle.FIELD_HEIGHT_INDEX_MAX = Puzzle.FIELD_HEIGHT + 1;
     Puzzle.FIELD_WIDTH_INDEX_MAX = Puzzle.FIELD_WIDTH + 1;
+    Puzzle.BLOCK_SIZE = 10;
     return Puzzle;
 }(Scene));

@@ -6,4 +6,5 @@ class Util{
   static screenHeight(scale: number) {
     return windowHeight * scale;
   }
+
 }
