@@ -15,6 +15,9 @@ class Puzzle extends Scene {
   private currentBlock: number[][][][]; // 現在操作中のブロック
   private position: Vec4; // 移動中のブロックの位置
 
+  static readonly BLOCK_DRAW_SIZE: number = 10; // 描画時のブロックの大きさ
+  static readonly W_LENGTH: number = 16*Puzzle.FIELD_WIDTH; // W用のずらし幅
+
   constructor(_game: Game) {
     super(_game);
 
@@ -88,10 +91,10 @@ class Puzzle extends Scene {
         this.position.z++;
       }
       if (Input.getKeyDown('Q')) {
-        this.position.w--;
+        this.position.w++;
       }
       if (Input.getKeyDown('E')) {
-        this.position.w++;
+        this.position.w--;
       }
       if (Input.getKeyDown('X')) {
         this.position.y++;
@@ -118,6 +121,71 @@ class Puzzle extends Scene {
   public draw(): void {
     background(255, 255, 255);
     // background(0);
+
+    this.draw3D();
+    
+  }
+
+  private draw3D(): void{
+
+    push();
+    strokeWeight(0.5);
+    fill(0, 128, 255);
+    noStroke();
+    // フィールドの枠描画
+    for (let w: number = Puzzle.FIELD_INDEX_MIN; w < Puzzle.FIELD_WIDTH_INDEX_MAX; w++){
+      push();
+      rotateY(w * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
+      translate(-Puzzle.W_LENGTH, 0);
+      translate(0.5 * Puzzle.BLOCK_DRAW_SIZE, Puzzle.BLOCK_DRAW_SIZE * (Puzzle.STAGE_HEIGHT - 1.5), 0.5 * Puzzle.BLOCK_DRAW_SIZE);
+      push();
+      rotateX(Math.PI / 2);
+      // rect(0, 0, Puzzle.BLOCK_DRAW_SIZE * Puzzle.FIELD_WIDTH, Puzzle.BLOCK_DRAW_SIZE * Puzzle.FIELD_WIDTH,);
+      for (let z: number = 0; z < Puzzle.FIELD_WIDTH; z++){
+        for (let x: number = 0; x < Puzzle.FIELD_WIDTH; x++){
+          push();
+          translate(x * Puzzle.BLOCK_DRAW_SIZE, z * Puzzle.BLOCK_DRAW_SIZE, 0);
+          rect(1, 1, Puzzle.BLOCK_DRAW_SIZE-1, Puzzle.BLOCK_DRAW_SIZE-1,1,1);
+          pop();
+        }
+      }
+      pop();
+      pop();
+    }
+
+    // 設置済みのブロックの描画
+    fill(0, 0, 0);
+    stroke(0, 128, 255);
+    Puzzle.fieldMethod(this.field, (y: number, w: number, z: number, x: number) => {
+      if (this.field[y][w][z][x] == 0) {
+        return;
+      }
+      push();
+      rotateY(w * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
+      translate(-Puzzle.W_LENGTH, 0);
+      translate(x * Puzzle.BLOCK_DRAW_SIZE, y * Puzzle.BLOCK_DRAW_SIZE, z * Puzzle.BLOCK_DRAW_SIZE);
+      box(Puzzle.BLOCK_DRAW_SIZE);
+      pop();
+    });
+
+
+    // 移動中ブロックの描画
+    Block.blockMethod(this.currentBlock, (y: number, w: number, z: number, x: number) => {
+      if (this.currentBlock[y][w][z][x] == 0) {
+        return;
+      }
+      push();
+      rotateY((w + this.position.w) * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
+      translate(-Puzzle.W_LENGTH, 0);
+      translate((x + this.position.x) * Puzzle.BLOCK_DRAW_SIZE, (y + this.position.y) * Puzzle.BLOCK_DRAW_SIZE, (z + this.position.z) * Puzzle.BLOCK_DRAW_SIZE);
+      box(Puzzle.BLOCK_DRAW_SIZE);
+      pop();
+    });
+
+    pop();
+  }
+
+  private draw2D(): void{
     fill(0);
     noStroke();
     // ステージの描画
@@ -134,11 +202,9 @@ class Puzzle extends Scene {
       }
     });
 
-    fill(255,0,0);
+    fill(255, 0, 0);
     rect(this.position.w * (Puzzle.STAGE_WIDTH + 2) * Puzzle.BLOCK_SIZE + this.position.x * Puzzle.BLOCK_SIZE, this.position.z * (Puzzle.STAGE_HEIGHT + 2) * Puzzle.BLOCK_SIZE + this.position.y * Puzzle.BLOCK_SIZE, Puzzle.BLOCK_SIZE - 2, Puzzle.BLOCK_SIZE - 2);
 
-    fill(0, 0, 255);
-    box(30);
   }
 
 

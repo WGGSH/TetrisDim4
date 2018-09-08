@@ -1,8 +1,8 @@
 class Camera{
-  static ROTATE_SPEED: number = 0.05;
+  static ROTATE_SPEED: number = 0.02;
   private static angleX: number = 0;
   private static angleY: number = 0;
-  private static range: number = 100;
+  private static range: number = 150;
   private static cameraDirection: Vec3 = new Vec3(0,0,0);
 
   public static initialize(): void{
@@ -29,6 +29,6 @@ class Camera{
       Camera.range * Math.sin(Camera.angleX) * Math.cos(Camera.angleY)
     );
     camera(Camera.cameraDirection.x, Camera.cameraDirection.y, Camera.cameraDirection.z,
-      0, 0, 0, 0, 1, 0);
+      0, Puzzle.STAGE_HEIGHT*Puzzle.BLOCK_DRAW_SIZE, 0, 0, 1, 0);
   }
 }

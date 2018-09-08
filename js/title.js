@@ -20,6 +20,7 @@ var Title = /** @class */ (function (_super) {
     Title.prototype.initialize = function () {
     };
     Title.prototype.update = function () {
+        this.game.changeScene(SCENE.PUZZLE);
         if (Input.getKeyDown('A')) {
             this.game.changeScene(SCENE.PUZZLE);
         }

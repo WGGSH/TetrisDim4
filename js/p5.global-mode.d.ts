@@ -564,6 +564,9 @@ declare function resetMatrix(): p5;
  * Rotates a shape the amount specified by the angle parameter.
  */
 declare function rotate(angle: number): p5;
+declare function rotateX(angle: number): p5;
+declare function rotateY(angle: number): p5;
+declare function rotateZ(angle: number): p5;
 
 // TODO: Fix scale() errors in src/core/transform.js:
 //
@@ -587,6 +590,7 @@ declare function shearY(angle: number): p5;
  * Specifies an amount to displace objects within the display window.
  */
 declare function translate(x: number, y: number): p5;
+declare function translate(x: number, y: number, z: number): p5;
 
 // src/core/vertex.js
 
