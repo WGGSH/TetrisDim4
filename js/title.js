@@ -30,5 +30,9 @@ var Title = /** @class */ (function (_super) {
         stroke(255, 0, 0);
         // text('hoge', 240, 240);
     };
+    Title.prototype.draw2D = function () {
+    };
+    Title.prototype.draw3D = function () {
+    };
     return Title;
 }(Scene));

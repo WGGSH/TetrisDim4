@@ -20,4 +20,12 @@ class Title extends Scene{
     stroke(255,0,0);
     // text('hoge', 240, 240);
   }
+
+  public draw2D(): void{
+    
+  }
+
+  public draw3D(): void{
+    
+  }
 }

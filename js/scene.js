@@ -9,6 +9,10 @@ var Scene = /** @class */ (function () {
     };
     Scene.prototype.draw = function () {
     };
+    Scene.prototype.draw2D = function () {
+    };
+    Scene.prototype.draw3D = function () {
+    };
     return Scene;
 }());
 var SCENE;

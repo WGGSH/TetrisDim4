@@ -73,8 +73,6 @@ class Puzzle extends Scene {
   }
 
   public update(): void {
-    // カメラの移動
-    Camera.update();
 
     if (keyIsPressed) {
       let prePos: Vec4 = new Vec4(this.position.x, this.position.y, this.position.z, this.position.w);
@@ -119,14 +117,27 @@ class Puzzle extends Scene {
   }
 
   public draw(): void {
-    background(255, 255, 255);
-    // background(0);
+    // background(255, 255, 255);
+    background(0);
 
-    this.draw3D();
+    // this.drawUI();
+
+    // this.draw3D();
     
   }
 
-  private draw3D(): void{
+  public draw2D(): void{
+    push();
+    // ortho(-width / 2, width / 2, height / 2, -height / 2, 0, 500);
+    ortho(0, width, 0, height, 0, (height / 2) / tan(radians(30)) + 0.5);
+
+    rect(0, 0, 100, 100);
+    pop();
+  }
+
+  public draw3D(): void {
+    // カメラの移動
+    Camera.update();
 
     push();
     strokeWeight(0.5);
@@ -185,7 +196,7 @@ class Puzzle extends Scene {
     pop();
   }
 
-  private draw2D(): void{
+  private draw2DField(): void{
     fill(0);
     noStroke();
     // ステージの描画

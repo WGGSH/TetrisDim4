@@ -16,6 +16,14 @@ class Scene{
 
   }
 
+  public draw2D(): void{
+    
+  }
+
+  public draw3D(): void{
+    
+  }
+
 }
 
 enum SCENE{

@@ -63,8 +63,6 @@ var Puzzle = /** @class */ (function (_super) {
         Camera.initialize();
     };
     Puzzle.prototype.update = function () {
-        // カメラの移動
-        Camera.update();
         if (keyIsPressed) {
             var prePos = new Vec4(this.position.x, this.position.y, this.position.z, this.position.w);
             if (Input.getKeyDown('A')) {
@@ -105,12 +103,22 @@ var Puzzle = /** @class */ (function (_super) {
         }
     };
     Puzzle.prototype.draw = function () {
-        background(255, 255, 255);
-        // background(0);
-        this.draw3D();
+        // background(255, 255, 255);
+        background(0);
+        // this.drawUI();
+        // this.draw3D();
+    };
+    Puzzle.prototype.draw2D = function () {
+        push();
+        // ortho(-width / 2, width / 2, height / 2, -height / 2, 0, 500);
+        ortho(0, width, 0, height, 0, (height / 2) / tan(radians(30)) + 0.5);
+        rect(0, 0, 100, 100);
+        pop();
     };
     Puzzle.prototype.draw3D = function () {
         var _this = this;
+        // カメラの移動
+        Camera.update();
         push();
         strokeWeight(0.5);
         fill(0, 128, 255);
@@ -163,7 +171,7 @@ var Puzzle = /** @class */ (function (_super) {
         });
         pop();
     };
-    Puzzle.prototype.draw2D = function () {
+    Puzzle.prototype.draw2DField = function () {
         var _this = this;
         fill(0);
         noStroke();
