@@ -111,14 +111,24 @@ var Puzzle = /** @class */ (function (_super) {
     Puzzle.prototype.draw2D = function () {
         push();
         // ortho(-width / 2, width / 2, height / 2, -height / 2, 0, 500);
-        ortho(0, width, 0, height, 0, (height / 2) / tan(radians(30)) + 0.5);
-        rect(0, 0, 100, 100);
+        // ortho(0, width, 0, height, 0, (height / 2) / tan(radians(30)) + 0.5);
+        // fill(255);
+        // noFill();
+        fill(255);
+        noStroke();
+        // stroke(255);
+        // strokeWeight(3);
+        // translate(0, 0, -10);
+        // rect(0, 0, width / 2, height / 2, 1, 1);
+        rect(0, height / 4 * 3, width, height / 4, 1, 1);
+        canvas2D.text("hoge", 0, 0);
         pop();
     };
     Puzzle.prototype.draw3D = function () {
         var _this = this;
         // カメラの移動
         Camera.update();
+        // return;
         push();
         strokeWeight(0.5);
         fill(0, 128, 255);

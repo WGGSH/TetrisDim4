@@ -1,8 +1,11 @@
 /// <reference path="p5.global-mode.d.ts" />
 
 var game: Game;
+var canvas3D: p5;
+var canvas2D: p5;
 function setup() {
-  createCanvas(windowWidth, windowHeight, WEBGL);
+  canvas2D = createCanvas(windowWidth, windowHeight);
+  canvas3D = createCanvas(windowWidth, windowHeight, WEBGL);
 
   window.addEventListener("touchstart", function (event) { event.preventDefault(); }, { passive: false });
   window.addEventListener("touchmove", function (event) { event.preventDefault(); }, { passive: false });

@@ -28,7 +28,6 @@ class Camera{
       Camera.range * Math.sin(Camera.angleY),
       Camera.range * Math.sin(Camera.angleX) * Math.cos(Camera.angleY)
     );
-    camera(Camera.cameraDirection.x, Camera.cameraDirection.y, Camera.cameraDirection.z,
-      0, Puzzle.STAGE_HEIGHT*Puzzle.BLOCK_DRAW_SIZE, 0, 0, 1, 0);
+    camera(Camera.cameraDirection.x, Camera.cameraDirection.y, Camera.cameraDirection.z, 0, Puzzle.STAGE_HEIGHT * Puzzle.BLOCK_DRAW_SIZE, 0, 0, 1, 0);
   }
 }

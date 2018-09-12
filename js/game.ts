@@ -19,8 +19,10 @@ class Game {
     background(0);
     this.sceneList[this.currentScene].update();
     // this.sceneList[this.currentScene].draw();
-    this.sceneList[this.currentScene].draw3D();
     this.sceneList[this.currentScene].draw2D();
+    push();
+    this.sceneList[this.currentScene].draw3D();
+    pop();
 
     // シーンが変更されるなら，次のシーンを初期化する
     if (this.nextScene != this.currentScene) {
