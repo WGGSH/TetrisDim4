@@ -13,7 +13,9 @@ var Game = /** @class */ (function () {
         background(0);
         this.sceneList[this.currentScene].update();
         // this.sceneList[this.currentScene].draw();
+        push();
         this.sceneList[this.currentScene].draw2D();
+        pop();
         push();
         this.sceneList[this.currentScene].draw3D();
         pop();

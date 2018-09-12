@@ -109,9 +109,7 @@ var Puzzle = /** @class */ (function (_super) {
         // this.draw3D();
     };
     Puzzle.prototype.draw2D = function () {
-        push();
-        // ortho(-width / 2, width / 2, height / 2, -height / 2, 0, 500);
-        // ortho(0, width, 0, height, 0, (height / 2) / tan(radians(30)) + 0.5);
+        ortho(-width / 2, width / 2, -height / 2, height / 2, 0, 2000);
         // fill(255);
         // noFill();
         fill(255);
@@ -120,9 +118,9 @@ var Puzzle = /** @class */ (function (_super) {
         // strokeWeight(3);
         // translate(0, 0, -10);
         // rect(0, 0, width / 2, height / 2, 1, 1);
+        translate(0, 0, 400);
         rect(0, height / 4 * 3, width, height / 4, 1, 1);
-        canvas2D.text("hoge", 0, 0);
-        pop();
+        // canvas2D.text("hoge", 0, 0);
     };
     Puzzle.prototype.draw3D = function () {
         var _this = this;
@@ -131,8 +129,8 @@ var Puzzle = /** @class */ (function (_super) {
         // return;
         push();
         strokeWeight(0.5);
-        fill(0, 128, 255);
-        noStroke();
+        // fill(0, 128, 255);
+        // noStroke();
         // フィールドの枠描画
         for (var w = Puzzle.FIELD_INDEX_MIN; w < Puzzle.FIELD_WIDTH_INDEX_MAX; w++) {
             push();
@@ -146,7 +144,12 @@ var Puzzle = /** @class */ (function (_super) {
                 for (var x = 0; x < Puzzle.FIELD_WIDTH; x++) {
                     push();
                     translate(x * Puzzle.BLOCK_DRAW_SIZE, z * Puzzle.BLOCK_DRAW_SIZE, 0);
+                    fill(0, 128, 255);
+                    noStroke();
                     rect(1, 1, Puzzle.BLOCK_DRAW_SIZE - 1, Puzzle.BLOCK_DRAW_SIZE - 1, 1, 1);
+                    fill(0, 0, 0);
+                    translate(0, 0, 0.005);
+                    rect(2, 2, Puzzle.BLOCK_DRAW_SIZE - 3, Puzzle.BLOCK_DRAW_SIZE - 3, 1, 1);
                     pop();
                 }
             }

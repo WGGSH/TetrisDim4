@@ -4,7 +4,7 @@ var game: Game;
 var canvas3D: p5;
 var canvas2D: p5;
 function setup() {
-  canvas2D = createCanvas(windowWidth, windowHeight);
+  // canvas2D = createCanvas(windowWidth, windowHeight);
   canvas3D = createCanvas(windowWidth, windowHeight, WEBGL);
 
   window.addEventListener("touchstart", function (event) { event.preventDefault(); }, { passive: false });

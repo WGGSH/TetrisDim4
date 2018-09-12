@@ -1,7 +1,7 @@
 class Camera{
   static ROTATE_SPEED: number = 0.02;
-  private static angleX: number = 0;
-  private static angleY: number = 0;
+  private static angleX: number = 150 / 180 * Math.PI;
+  private static angleY: number = -35 / 180 * Math.PI;
   private static range: number = 150;
   private static cameraDirection: Vec3 = new Vec3(0,0,0);
 
@@ -19,8 +19,8 @@ class Camera{
       if (Camera.angleY < -Math.PI / 2) {
         Camera.angleY = -Math.PI / 2;
       }
-      if (Camera.angleY > Math.PI / 2) {
-        Camera.angleY = Math.PI / 2;
+      if (Camera.angleY > Math.PI / 180 * 15) {
+        Camera.angleY = Math.PI / 180 * 15;
       }
     }
     Camera.cameraDirection.set(
@@ -28,6 +28,10 @@ class Camera{
       Camera.range * Math.sin(Camera.angleY),
       Camera.range * Math.sin(Camera.angleX) * Math.cos(Camera.angleY)
     );
-    camera(Camera.cameraDirection.x, Camera.cameraDirection.y, Camera.cameraDirection.z, 0, Puzzle.STAGE_HEIGHT * Puzzle.BLOCK_DRAW_SIZE, 0, 0, 1, 0);
+
+    let cameraZ = height / 2 / tan(60 / 180 * PI);
+    perspective(60 / 180 * PI, width / height, cameraZ * 0.1, cameraZ * 10);
+    camera(Camera.cameraDirection.x, Camera.cameraDirection.y, Camera.cameraDirection.z, 0, Puzzle.STAGE_HEIGHT * Puzzle.BLOCK_DRAW_SIZE / 4 * 3, 0, 0, 1, 0);
+    console.log(Camera.angleX*180/PI);
   }
 }
