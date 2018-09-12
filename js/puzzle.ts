@@ -185,6 +185,7 @@ class Puzzle extends Scene {
         return;
       }
       push();
+      stroke(Block.BLOCK_COLOR[this.field[y][w][z][x] - 1]);
       rotateY(w * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
       translate(-Puzzle.W_LENGTH, 0);
       translate(x * Puzzle.BLOCK_DRAW_SIZE, y * Puzzle.BLOCK_DRAW_SIZE, z * Puzzle.BLOCK_DRAW_SIZE);
@@ -199,9 +200,39 @@ class Puzzle extends Scene {
         return;
       }
       push();
+      stroke(Block.BLOCK_COLOR[this.currentBlock[y][w][z][x] - 1]);
       rotateY((w + this.position.w) * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
       translate(-Puzzle.W_LENGTH, 0);
       translate((x + this.position.x) * Puzzle.BLOCK_DRAW_SIZE, (y + this.position.y) * Puzzle.BLOCK_DRAW_SIZE, (z + this.position.z) * Puzzle.BLOCK_DRAW_SIZE);
+      box(Puzzle.BLOCK_DRAW_SIZE);
+      pop();
+    });
+
+    // ゴーストブロックの描画
+    // 落下可能距離を導出する
+    let dropVec: Vec4 = new Vec4(null);
+    let dropDist: number = 0;
+    for (let y = this.position.y; y < Puzzle.STAGE_HEIGHT; y++){
+      dropVec.set(this.position.x, y, this.position.z, this.position.w);
+      if (this.collisionBlock(dropVec) == true) {
+        dropDist = y - 1;
+        break;
+      }
+    }
+
+    // ゴーストを描画
+    fill(0, 0, 0, 64);
+    Block.blockMethod(this.currentBlock, (y: number, w: number, z: number, x: number) => {
+      if (this.currentBlock[y][w][z][x] == 0) {
+        return;
+      }
+      // TODO: ゴーストが移動中のブロックと重なっている場合,描画しない
+
+      push();
+      stroke(Block.BLOCK_COLOR[this.currentBlock[y][w][z][x] - 1]);
+      rotateY((w + this.position.w) * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
+      translate(-Puzzle.W_LENGTH, 0);
+      translate((x + this.position.x) * Puzzle.BLOCK_DRAW_SIZE, (y+dropDist) * Puzzle.BLOCK_DRAW_SIZE, (z + this.position.z) * Puzzle.BLOCK_DRAW_SIZE);
       box(Puzzle.BLOCK_DRAW_SIZE);
       pop();
     });

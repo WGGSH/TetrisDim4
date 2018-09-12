@@ -2,6 +2,7 @@ class Block{
   public static BLOCK_WIDTH: number = 4; // 1組のブロックを格納する幅
   public static BLOCK_TYPE_MAX: number = 7; // 降ってくるブロックの種類の総数
   public static BLOCK_LIST: number[][][][][]; // ブロックの配置リスト
+  public static BLOCK_COLOR: p5.Color[]; // ブロックの色リスト
 
   public static initialize(): void{
     Block.BLOCK_LIST = new Array(Block.BLOCK_TYPE_MAX);
@@ -64,6 +65,17 @@ class Block{
     Block.BLOCK_LIST[6][1][1][1][2] = 7;
     Block.BLOCK_LIST[6][2][1][1][1] = 7;
     Block.BLOCK_LIST[6][1][1][2][2] = 7;
+
+    // ブロックの色情報設定
+    Block.BLOCK_COLOR = new Array(Block.BLOCK_TYPE_MAX);
+    Block.BLOCK_COLOR[0] = color(255, 0, 0);
+    Block.BLOCK_COLOR[1] = color(0, 255, 0);
+    Block.BLOCK_COLOR[2] = color(0, 0, 255);
+    Block.BLOCK_COLOR[3] = color(255, 255, 0);
+    Block.BLOCK_COLOR[4] = color(255, 0, 255);
+    Block.BLOCK_COLOR[5] = color(0, 255, 255);
+    Block.BLOCK_COLOR[6] = color(255, 255, 255);
+
   }
 
   public static blockMethod(_block: number[][][][], method: (_y: number, _w: number, _z: number, _x: number) => any): void{

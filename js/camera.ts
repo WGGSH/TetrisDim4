@@ -32,6 +32,5 @@ class Camera{
     let cameraZ = height / 2 / tan(60 / 180 * PI);
     perspective(60 / 180 * PI, width / height, cameraZ * 0.1, cameraZ * 10);
     camera(Camera.cameraDirection.x, Camera.cameraDirection.y, Camera.cameraDirection.z, 0, Puzzle.STAGE_HEIGHT * Puzzle.BLOCK_DRAW_SIZE / 4 * 3, 0, 0, 1, 0);
-    console.log(Camera.angleX*180/PI);
   }
 }

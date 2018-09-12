@@ -164,6 +164,7 @@ var Puzzle = /** @class */ (function (_super) {
                 return;
             }
             push();
+            stroke(Block.BLOCK_COLOR[_this.field[y][w][z][x] - 1]);
             rotateY(w * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
             translate(-Puzzle.W_LENGTH, 0);
             translate(x * Puzzle.BLOCK_DRAW_SIZE, y * Puzzle.BLOCK_DRAW_SIZE, z * Puzzle.BLOCK_DRAW_SIZE);
@@ -176,9 +177,37 @@ var Puzzle = /** @class */ (function (_super) {
                 return;
             }
             push();
+            stroke(Block.BLOCK_COLOR[_this.currentBlock[y][w][z][x] - 1]);
             rotateY((w + _this.position.w) * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
             translate(-Puzzle.W_LENGTH, 0);
             translate((x + _this.position.x) * Puzzle.BLOCK_DRAW_SIZE, (y + _this.position.y) * Puzzle.BLOCK_DRAW_SIZE, (z + _this.position.z) * Puzzle.BLOCK_DRAW_SIZE);
+            box(Puzzle.BLOCK_DRAW_SIZE);
+            pop();
+        });
+        // ゴーストブロックの描画
+        // 落下可能距離を導出する
+        var dropVec = new Vec4(null);
+        var dropDist = 0;
+        for (var y = this.position.y; y < Puzzle.STAGE_HEIGHT; y++) {
+            dropVec.set(this.position.x, y, this.position.z, this.position.w);
+            if (this.collisionBlock(dropVec) == true) {
+                dropDist = y - 1;
+                console.log(dropVec);
+                break;
+            }
+        }
+        // ゴーストを描画
+        fill(0, 0, 0, 64);
+        Block.blockMethod(this.currentBlock, function (y, w, z, x) {
+            if (_this.currentBlock[y][w][z][x] == 0) {
+                return;
+            }
+            // TODO: ゴーストが移動中のブロックと重なっている場合,描画しない
+            push();
+            stroke(Block.BLOCK_COLOR[_this.currentBlock[y][w][z][x] - 1]);
+            rotateY((w + _this.position.w) * Math.PI * 2 / (Puzzle.FIELD_WIDTH + 1));
+            translate(-Puzzle.W_LENGTH, 0);
+            translate((x + _this.position.x) * Puzzle.BLOCK_DRAW_SIZE, (y + dropDist) * Puzzle.BLOCK_DRAW_SIZE, (z + _this.position.z) * Puzzle.BLOCK_DRAW_SIZE);
             box(Puzzle.BLOCK_DRAW_SIZE);
             pop();
         });
