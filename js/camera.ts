@@ -3,7 +3,11 @@ class Camera{
   private static angleX: number = 150 / 180 * Math.PI;
   private static angleY: number = -35 / 180 * Math.PI;
   private static range: number = 150;
-  private static cameraDirection: Vec3 = new Vec3(0,0,0);
+  private static cameraDirection: Vec3 = new Vec3(0, 0, 0);
+  
+  static get AngleX(): number{
+    return Camera.angleX;
+  }
 
   public static initialize(): void{
     ambientLight(100);

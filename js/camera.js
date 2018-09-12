@@ -2,6 +2,13 @@
 var Camera = /** @class */ (function () {
     function Camera() {
     }
+    Object.defineProperty(Camera, "AngleX", {
+        get: function () {
+            return Camera.angleX;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Camera.initialize = function () {
         ambientLight(100);
         directionalLight(120, 120, 120, -1, -1, -1);

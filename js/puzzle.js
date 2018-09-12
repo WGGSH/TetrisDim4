@@ -118,12 +118,23 @@ var Puzzle = /** @class */ (function (_super) {
         // noFill();
         fill(255);
         noStroke();
-        // stroke(255);
-        // strokeWeight(3);
-        // translate(0, 0, -10);
-        // rect(0, 0, width / 2, height / 2, 1, 1);
         translate(0, 0, 400);
+        // 背景色
         rect(0, height / 4 * 3, width, height / 4, 1, 1);
+        // 矢印の描画
+        push();
+        translate(width / 2, height / 8 * 7);
+        for (var i = 0; i < 4; i++) {
+            push();
+            rotate(radians(i * 90 + 36 * this.position.w) - Camera.AngleX);
+            console.log(i * 90 + 75 * this.position.w);
+            translate(40, 0);
+            texture(Resource.getResource(RESOURCE_ID.BUTTON_ARROW));
+            plane(50, 50);
+            pop();
+        }
+        // image(Resource.getResource(RESOURCE_ID.BUTTON_ARROW),0,0);
+        pop();
         // canvas2D.text("hoge", 0, 0);
     };
     Puzzle.prototype.draw3D = function () {

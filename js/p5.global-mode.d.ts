@@ -92,6 +92,7 @@ declare function normalMaterial(): p5;
  * Texture for geometry
  */
 declare function texture(): p5;
+declare function texture(tex: p5.Image | p5.MediaElement | p5.Graphics): p5;
 
 /**
  * Basic material for geometry with a given color
