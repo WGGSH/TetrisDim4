@@ -11,6 +11,7 @@ function setup() {
   window.addEventListener("touchmove", function (event) { event.preventDefault(); }, { passive: false });
 
   Block.initialize();
+  Resource.initialize();
 
   game = new Game();
 }

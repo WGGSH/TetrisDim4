@@ -95,10 +95,14 @@ var Puzzle = /** @class */ (function (_super) {
                     this.position.set(prePos.x, prePos.y, prePos.z, prePos.w);
                 }
             }
+            // Cキーで，ブロックが接地していれば固定する
             if (Input.getKeyDown('C')) {
-                this.setBlock();
-                this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
-                this.fixPosition();
+                var dropVec = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
+                if (this.collisionBlock(dropVec) == true) {
+                    this.setBlock();
+                    this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
+                    this.fixPosition();
+                }
             }
         }
     };
@@ -192,7 +196,6 @@ var Puzzle = /** @class */ (function (_super) {
             dropVec.set(this.position.x, y, this.position.z, this.position.w);
             if (this.collisionBlock(dropVec) == true) {
                 dropDist = y - 1;
-                console.log(dropVec);
                 break;
             }
         }

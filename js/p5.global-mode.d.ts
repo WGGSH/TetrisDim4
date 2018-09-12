@@ -980,6 +980,7 @@ declare function saveFrames(filename: string, extension: string, duration: numbe
 //   param "failureCallback" has invalid type: Function(Event)
 //
 // declare function loadImage(path: string, successCallback?: Function(p5.Image), failureCallback?: Function(Event)): p5.Image;
+declare function loadImage(path: string): p5.Image;
 
 /**
  * Draw an image to the main canvas of the p5js sketch

@@ -107,10 +107,14 @@ class Puzzle extends Scene {
         }
       }
 
+      // Cキーで，ブロックが接地していれば固定する
       if (Input.getKeyDown('C')) {
-        this.setBlock();
-        this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
-        this.fixPosition();
+        let dropVec: Vec4 = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
+        if (this.collisionBlock(dropVec) == true) {
+          this.setBlock();
+          this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
+          this.fixPosition();
+        }
       }
     }
 

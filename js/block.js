@@ -29,10 +29,10 @@ var Block = /** @class */ (function () {
         Block.BLOCK_LIST[0][2][1][1][1] = 1;
         Block.BLOCK_LIST[0][2][1][1][2] = 1;
         // 2つ目: I字(テトリス棒)
-        Block.BLOCK_LIST[1][1][1][1][0] = 2;
-        Block.BLOCK_LIST[1][1][1][1][1] = 2;
-        Block.BLOCK_LIST[1][1][1][1][2] = 2;
-        Block.BLOCK_LIST[1][1][1][1][3] = 2;
+        Block.BLOCK_LIST[1][2][1][1][0] = 2;
+        Block.BLOCK_LIST[1][2][1][1][1] = 2;
+        Block.BLOCK_LIST[1][2][1][1][2] = 2;
+        Block.BLOCK_LIST[1][2][1][1][3] = 2;
         // 3つ目: T字
         Block.BLOCK_LIST[2][1][1][1][1] = 3;
         Block.BLOCK_LIST[2][2][1][1][0] = 3;
@@ -49,15 +49,15 @@ var Block = /** @class */ (function () {
         Block.BLOCK_LIST[4][2][1][1][2] = 5;
         Block.BLOCK_LIST[4][2][1][1][3] = 5;
         // 6つ目: 3次元的形状その1
-        Block.BLOCK_LIST[5][1][1][1][1] = 6;
-        Block.BLOCK_LIST[5][1][1][1][2] = 6;
         Block.BLOCK_LIST[5][2][1][1][1] = 6;
-        Block.BLOCK_LIST[5][1][1][2][1] = 6;
+        Block.BLOCK_LIST[5][2][1][1][2] = 6;
+        Block.BLOCK_LIST[5][1][1][1][1] = 6;
+        Block.BLOCK_LIST[5][2][1][2][1] = 6;
         // 7つ目: 3次元的形状その2
-        Block.BLOCK_LIST[6][1][1][1][1] = 7;
-        Block.BLOCK_LIST[6][1][1][1][2] = 7;
         Block.BLOCK_LIST[6][2][1][1][1] = 7;
-        Block.BLOCK_LIST[6][1][1][2][2] = 7;
+        Block.BLOCK_LIST[6][2][1][1][2] = 7;
+        Block.BLOCK_LIST[6][1][1][1][1] = 7;
+        Block.BLOCK_LIST[6][2][1][2][2] = 7;
         // ブロックの色情報設定
         Block.BLOCK_COLOR = new Array(Block.BLOCK_TYPE_MAX);
         Block.BLOCK_COLOR[0] = color(255, 0, 0);
