@@ -155,8 +155,6 @@ class Puzzle extends Scene {
 
     this.ui.draw();
 
-    
-
     // canvas2D.text("hoge", 0, 0);
 
   }

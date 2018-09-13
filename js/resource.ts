@@ -8,6 +8,8 @@ class Resource{
 
     // パスの設定
     Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_ARROW] = 'Resources/buttonArrow.png';
+    Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_STRAIGHT] = 'Resources/buttonStraight.png';
+    Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_TURN] = 'Resources/buttonTurn.png';
   }
 
   public static getResource(id: RESOURCE_ID) {
@@ -22,6 +24,8 @@ class Resource{
 
 enum RESOURCE_ID {
   BUTTON_ARROW,
+  BUTTON_STRAIGHT,
+  BUTTON_TURN,
 };
-const RESOURCE_NUM: number = 1;
+const RESOURCE_NUM: number = 3;
 

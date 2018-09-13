@@ -11,8 +11,8 @@ var PuzzleUI = /** @class */ (function () {
             for (var i = 0; i < 4; i++) {
                 var targetPos = new Vec2(null);
                 fill(255);
-                targetPos.set(width / 2 + Puzzle.UI_HEIGHT / 3 * Math.cos(radians(i * 90 - 60 * this.puzzle.Position.w - 60) - Camera.AngleX), height / 8 * 7 + Puzzle.UI_HEIGHT / 3 * Math.sin(radians(i * 90 - 60 * this.puzzle.Position.w - 60) - Camera.AngleX));
-                ellipse(targetPos.x, targetPos.y, Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
+                targetPos.set(width / 2 + Puzzle.UI_HEIGHT / 4 * Math.cos(radians(i * 90 - 60 * this.puzzle.Position.w - 60) - Camera.AngleX), height / 8 * 7 + Puzzle.UI_HEIGHT / 4 * Math.sin(radians(i * 90 - 60 * this.puzzle.Position.w - 60) - Camera.AngleX));
+                // ellipse(targetPos.x, targetPos.y, Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
                 if (mosuePos.distance(targetPos) < Puzzle.UI_HEIGHT / 6) {
                     switch (i) {
                         case 0:
@@ -41,23 +41,47 @@ var PuzzleUI = /** @class */ (function () {
         noStroke();
         translate(0, 0, 400);
         // 背景色
-        // rect(0, height / 4 * 3, width, height / 4, 1, 1);
-        // 矢印の描画
+        fill(64, 64, 64);
+        rect(0, height / 4 * 3, width, height / 4, 1, 1);
+        // 4方向矢印の描画
         push();
         translate(width / 2, height / 8 * 7);
         for (var i = 0; i < 4; i++) {
             push();
             rotate(radians(i * 90 - 60 * this.puzzle.Position.w - 60) - Camera.AngleX);
-            translate(Puzzle.UI_HEIGHT / 3, 0);
+            translate(Puzzle.UI_HEIGHT / 4, 0);
             texture(Resource.getResource(RESOURCE_ID.BUTTON_ARROW));
-            plane(Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
+            plane(Puzzle.UI_HEIGHT / 2, Puzzle.UI_HEIGHT / 2);
             noFill();
             stroke(128, 128, 128, 128);
             strokeWeight(1);
             ellipse(0, 0, Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
             pop();
         }
-        // image(Resource.getResource(RESOURCE_ID.BUTTON_ARROW),0,0);
+        pop();
+        // 回転ボタンの描画
+        push();
+        translate(width / 2, height / 8 * 7);
+        for (var i = 0; i < 2; i++) {
+            push();
+            rotate(radians(i * 180));
+            translate(Puzzle.UI_HEIGHT / 2 + Puzzle.UI_HEIGHT / 6, 0);
+            texture(Resource.getResource(RESOURCE_ID.BUTTON_TURN));
+            plane(Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT);
+            pop();
+        }
+        pop();
+        // 上下移動ボタンの描画
+        push();
+        translate(width / 2 + Puzzle.UI_HEIGHT, height / 8 * 7);
+        for (var i = 0; i < 2; i++) {
+            push();
+            rotate(radians(i * 180));
+            translate(0, Puzzle.UI_HEIGHT / 4);
+            texture(Resource.getResource(RESOURCE_ID.BUTTON_STRAIGHT));
+            plane(Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 2.5);
+            pop();
+        }
         pop();
     };
     return PuzzleUI;
