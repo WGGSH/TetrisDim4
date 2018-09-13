@@ -23,4 +23,13 @@ class Vec2{
     this.y = _b;
     return;
   }
+
+  public set(_x: number, _y: number): void {
+    this.x = _x;
+    this.y = _y;
+  }
+
+  public distance(vec: Vec2): number{
+    return sqrt((this.x - vec.x) * (this.x - vec.x) + (this.y - vec.y) * (this.y - vec.y));
+  }
 }

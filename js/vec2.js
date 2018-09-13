@@ -15,5 +15,12 @@ var Vec2 = /** @class */ (function () {
         this.y = _b;
         return;
     }
+    Vec2.prototype.set = function (_x, _y) {
+        this.x = _x;
+        this.y = _y;
+    };
+    Vec2.prototype.distance = function (vec) {
+        return sqrt((this.x - vec.x) * (this.x - vec.x) + (this.y - vec.y) * (this.y - vec.y));
+    };
     return Vec2;
 }());

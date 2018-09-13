@@ -1,4 +1,6 @@
 class Puzzle extends Scene {
+  private ui: PuzzleUI; // UI
+
   static readonly FIELD_WIDTH: number = 5; // フィールドの高さ以外の幅
   static readonly STAGE_WIDTH: number = Puzzle.FIELD_WIDTH + 2;
   static readonly FIELD_HEIGHT: number = 10; // フィールドの高さ
@@ -14,14 +16,24 @@ class Puzzle extends Scene {
   private field: number[][][][]; // プレイフィールド [Y][W][Z][X]
   private currentBlock: number[][][][]; // 現在操作中のブロック
   private position: Vec4; // 移動中のブロックの位置
+  private moveVec: Vec4; // 移動ベクトル
 
   static readonly BLOCK_DRAW_SIZE: number = 10; // 描画時のブロックの大きさ
   static readonly W_LENGTH: number = 16 * Puzzle.FIELD_WIDTH; // W用のずらし幅
 
   static UI_HEIGHT: number; //UI部の高さ(コンストラクタで初期化)
 
+  public get Position(): Vec4{
+    return this.position
+  }
+
+  public get MoveVec(): Vec4{
+    return this.moveVec;
+  }
+
   constructor(_game: Game) {
     super(_game);
+    this.ui = new PuzzleUI(this);
 
     Puzzle.UI_HEIGHT = height / 4;
 
@@ -56,6 +68,7 @@ class Puzzle extends Scene {
     });
 
     this.position = new Vec4(null);
+    this.moveVec = new Vec4(null);
   }
 
   public initialize(): void {
@@ -77,38 +90,33 @@ class Puzzle extends Scene {
   }
 
   public update(): void {
+    this.moveVec.set(0, 0, 0, 0);
+    this.ui.update();
 
     if (keyIsPressed) {
-      let prePos: Vec4 = new Vec4(this.position.x, this.position.y, this.position.z, this.position.w);
       if (Input.getKeyDown('A')) {
-        this.position.x--;
+        this.moveVec.set(-1, 0, 0, 0);
       }
       if (Input.getKeyDown('D')) {
-        this.position.x++;
+        this.moveVec.set(1, 0, 0, 0);
       }
       if (Input.getKeyDown('W')) {
-        this.position.z--;
+        this.moveVec.set(0, 0, -1, 0);
       }
       if (Input.getKeyDown('S')) {
-        this.position.z++;
+        this.moveVec.set(0, 0, 1, 0);
       }
       if (Input.getKeyDown('Q')) {
-        this.position.w++;
+        this.moveVec.set(0, 0, 0, 1);
       }
       if (Input.getKeyDown('E')) {
-        this.position.w--;
+        this.moveVec.set(0, 0, 0, -1);
       }
       if (Input.getKeyDown('X')) {
-        this.position.y++;
+        this.moveVec.set(0, 1, 0, 0);
       }
       if (Input.getKeyDown('Z')) {
-        this.position.y--;
-      }
-      if (this.position.equal(prePos) == false) {
-        // 移動先にブロックがある場合,移動を無効化する
-        if (this.collisionBlock(this.position) == true) {
-          this.position.set(prePos.x, prePos.y, prePos.z, prePos.w);
-        }
+        this.moveVec.set(0, -1, 0, 0);
       }
 
       // Cキーで，ブロックが接地していれば固定する
@@ -119,6 +127,14 @@ class Puzzle extends Scene {
           this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
           this.fixPosition();
         }
+      }
+
+    }
+    if (!this.moveVec.equal(new Vec4(null))) {
+      // 移動先にブロックがある場合,移動を無効化する
+      let targetPos: Vec4 = new Vec4(this.position.x + this.moveVec.x, this.position.y + this.moveVec.y, this.position.z + this.moveVec.z, this.position.w + this.moveVec.w);
+      if (this.collisionBlock(targetPos) == false) {
+        this.position.set(targetPos.x, targetPos.y, targetPos.z, targetPos.w);
       }
     }
 
@@ -137,30 +153,9 @@ class Puzzle extends Scene {
   public draw2D(): void{
     ortho(-width / 2, width / 2, -height / 2, height / 2, 0 , 2000);
 
-    // fill(255);
-    // noFill();
-    fill(255);
-    noStroke();
-    translate(0, 0, 400);
+    this.ui.draw();
 
-    // 背景色
-    rect(0, height / 4 * 3, width, height / 4, 1, 1);
-
-    // 矢印の描画
-    push();
-    translate(width / 2, height / 8 * 7);
-    for (let i: number = 0; i < 4; i++) {
-      push();
-      rotate(radians(i * 90 - 60 * this.position.w - 60)-Camera.AngleX);
-      // console.log(i * 90 + 75 * this.position.w);
-      translate(Puzzle.UI_HEIGHT / 3, 0);
-      texture(Resource.getResource(RESOURCE_ID.BUTTON_ARROW));
-      plane(Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
-      ellipse(0, 0, Puzzle.UI_HEIGHT, Puzzle.UI_HEIGHT);
-      pop();
-    }
-    // image(Resource.getResource(RESOURCE_ID.BUTTON_ARROW),0,0);
-    pop();
+    
 
     // canvas2D.text("hoge", 0, 0);
 

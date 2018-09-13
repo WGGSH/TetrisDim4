@@ -16,6 +16,7 @@ var Puzzle = /** @class */ (function (_super) {
     __extends(Puzzle, _super);
     function Puzzle(_game) {
         var _this = _super.call(this, _game) || this;
+        _this.ui = new PuzzleUI(_this);
         Puzzle.UI_HEIGHT = height / 4;
         // フィールドの初期化
         _this.field = new Array();
@@ -46,8 +47,23 @@ var Puzzle = /** @class */ (function (_super) {
             _this.currentBlock[y][w][z][x] = 0;
         });
         _this.position = new Vec4(null);
+        _this.moveVec = new Vec4(null);
         return _this;
     }
+    Object.defineProperty(Puzzle.prototype, "Position", {
+        get: function () {
+            return this.position;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Puzzle.prototype, "MoveVec", {
+        get: function () {
+            return this.moveVec;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Puzzle.prototype.initialize = function () {
         var _this = this;
         // カーソル位置の初期化
@@ -64,37 +80,32 @@ var Puzzle = /** @class */ (function (_super) {
         Camera.initialize();
     };
     Puzzle.prototype.update = function () {
+        this.moveVec.set(0, 0, 0, 0);
+        this.ui.update();
         if (keyIsPressed) {
-            var prePos = new Vec4(this.position.x, this.position.y, this.position.z, this.position.w);
             if (Input.getKeyDown('A')) {
-                this.position.x--;
+                this.moveVec.set(-1, 0, 0, 0);
             }
             if (Input.getKeyDown('D')) {
-                this.position.x++;
+                this.moveVec.set(1, 0, 0, 0);
             }
             if (Input.getKeyDown('W')) {
-                this.position.z--;
+                this.moveVec.set(0, 0, -1, 0);
             }
             if (Input.getKeyDown('S')) {
-                this.position.z++;
+                this.moveVec.set(0, 0, 1, 0);
             }
             if (Input.getKeyDown('Q')) {
-                this.position.w++;
+                this.moveVec.set(0, 0, 0, 1);
             }
             if (Input.getKeyDown('E')) {
-                this.position.w--;
+                this.moveVec.set(0, 0, 0, -1);
             }
             if (Input.getKeyDown('X')) {
-                this.position.y++;
+                this.moveVec.set(0, 1, 0, 0);
             }
             if (Input.getKeyDown('Z')) {
-                this.position.y--;
-            }
-            if (this.position.equal(prePos) == false) {
-                // 移動先にブロックがある場合,移動を無効化する
-                if (this.collisionBlock(this.position) == true) {
-                    this.position.set(prePos.x, prePos.y, prePos.z, prePos.w);
-                }
+                this.moveVec.set(0, -1, 0, 0);
             }
             // Cキーで，ブロックが接地していれば固定する
             if (Input.getKeyDown('C')) {
@@ -106,6 +117,13 @@ var Puzzle = /** @class */ (function (_super) {
                 }
             }
         }
+        if (!this.moveVec.equal(new Vec4(null))) {
+            // 移動先にブロックがある場合,移動を無効化する
+            var targetPos = new Vec4(this.position.x + this.moveVec.x, this.position.y + this.moveVec.y, this.position.z + this.moveVec.z, this.position.w + this.moveVec.w);
+            if (this.collisionBlock(targetPos) == false) {
+                this.position.set(targetPos.x, targetPos.y, targetPos.z, targetPos.w);
+            }
+        }
     };
     Puzzle.prototype.draw = function () {
         // background(255, 255, 255);
@@ -115,28 +133,7 @@ var Puzzle = /** @class */ (function (_super) {
     };
     Puzzle.prototype.draw2D = function () {
         ortho(-width / 2, width / 2, -height / 2, height / 2, 0, 2000);
-        // fill(255);
-        // noFill();
-        fill(255);
-        noStroke();
-        translate(0, 0, 400);
-        // 背景色
-        rect(0, height / 4 * 3, width, height / 4, 1, 1);
-        // 矢印の描画
-        push();
-        translate(width / 2, height / 8 * 7);
-        for (var i = 0; i < 4; i++) {
-            push();
-            rotate(radians(i * 90 - 60 * this.position.w - 60) - Camera.AngleX);
-            // console.log(i * 90 + 75 * this.position.w);
-            translate(Puzzle.UI_HEIGHT / 3, 0);
-            texture(Resource.getResource(RESOURCE_ID.BUTTON_ARROW));
-            plane(Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
-            ellipse(0, 0, Puzzle.UI_HEIGHT, Puzzle.UI_HEIGHT);
-            pop();
-        }
-        // image(Resource.getResource(RESOURCE_ID.BUTTON_ARROW),0,0);
-        pop();
+        this.ui.draw();
         // canvas2D.text("hoge", 0, 0);
     };
     Puzzle.prototype.draw3D = function () {
