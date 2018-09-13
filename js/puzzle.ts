@@ -35,7 +35,7 @@ class Puzzle extends Scene {
     super(_game);
     this.ui = new PuzzleUI(this);
 
-    Puzzle.UI_HEIGHT = height / 4;
+    Puzzle.UI_HEIGHT = height / 5;
 
     // フィールドの初期化
     this.field = new Array();
@@ -121,12 +121,7 @@ class Puzzle extends Scene {
 
       // Cキーで，ブロックが接地していれば固定する
       if (Input.getKeyDown('C')) {
-        let dropVec: Vec4 = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
-        if (this.collisionBlock(dropVec) == true) {
-          this.setBlock();
-          this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
-          this.fixPosition();
-        }
+        this.fixBlock();
       }
 
     }
@@ -155,6 +150,23 @@ class Puzzle extends Scene {
 
     this.ui.draw();
 
+    // デバッグ用,クリック情報の描画
+    push();
+    if (Input.MouseDown) {
+      fill(255, 0, 0);
+      noStroke();
+      ellipse(Input.MousePos.x, Input.MousePos.y, 15, 15);
+    } else if (Input.MousePress) {
+      fill(255);
+      noStroke();
+      ellipse(Input.MousePos.x, Input.MousePos.y, 15, 15);
+      fill(255, 0, 0);
+      ellipse(Input.ClickPos.x, Input.ClickPos.y, 10, 10);
+      noFill();
+      stroke(255);
+      line(Input.ClickPos.x, Input.ClickPos.y, Input.MousePos.x, Input.MousePos.y);
+    }
+    pop();
     // canvas2D.text("hoge", 0, 0);
 
   }
@@ -324,6 +336,16 @@ class Puzzle extends Scene {
   // カーソル位置を初期化
   private fixPosition(): void{
     this.position.set(Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), 0, Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), Math.floor(Puzzle.STAGE_WIDTH / 2 - 1));
+  }
+
+  // ブロック設置処理
+  public fixBlock(): void{
+    let dropVec: Vec4 = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
+    if (this.collisionBlock(dropVec) == true) {
+      this.setBlock();
+      this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
+      this.fixPosition();
+    }
   }
 
   // ブロックとフィールドの接触判定

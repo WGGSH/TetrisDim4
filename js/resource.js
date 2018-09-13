@@ -9,6 +9,9 @@ var Resource = /** @class */ (function () {
         Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_ARROW] = 'Resources/buttonArrow.png';
         Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_STRAIGHT] = 'Resources/buttonStraight.png';
         Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_TURN] = 'Resources/buttonTurn.png';
+        Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_FIX] = 'Resources/buttonFix.png';
+        Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_ROTATE] = 'Resources/buttonRotate.png';
+        Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_ROTATE2] = 'Resources/buttonRotate2.png';
     };
     Resource.getResource = function (id) {
         // 初読み込み時だけ，読み込み処理を行う
@@ -24,6 +27,9 @@ var RESOURCE_ID;
     RESOURCE_ID[RESOURCE_ID["BUTTON_ARROW"] = 0] = "BUTTON_ARROW";
     RESOURCE_ID[RESOURCE_ID["BUTTON_STRAIGHT"] = 1] = "BUTTON_STRAIGHT";
     RESOURCE_ID[RESOURCE_ID["BUTTON_TURN"] = 2] = "BUTTON_TURN";
+    RESOURCE_ID[RESOURCE_ID["BUTTON_FIX"] = 3] = "BUTTON_FIX";
+    RESOURCE_ID[RESOURCE_ID["BUTTON_ROTATE"] = 4] = "BUTTON_ROTATE";
+    RESOURCE_ID[RESOURCE_ID["BUTTON_ROTATE2"] = 5] = "BUTTON_ROTATE2";
 })(RESOURCE_ID || (RESOURCE_ID = {}));
 ;
-var RESOURCE_NUM = 3;
+var RESOURCE_NUM = 6;

@@ -10,6 +10,9 @@ class Resource{
     Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_ARROW] = 'Resources/buttonArrow.png';
     Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_STRAIGHT] = 'Resources/buttonStraight.png';
     Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_TURN] = 'Resources/buttonTurn.png';
+    Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_FIX] = 'Resources/buttonFix.png';
+    Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_ROTATE] = 'Resources/buttonRotate.png';
+    Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_ROTATE2] = 'Resources/buttonRotate2.png';
   }
 
   public static getResource(id: RESOURCE_ID) {
@@ -26,6 +29,9 @@ enum RESOURCE_ID {
   BUTTON_ARROW,
   BUTTON_STRAIGHT,
   BUTTON_TURN,
+  BUTTON_FIX,
+  BUTTON_ROTATE,
+  BUTTON_ROTATE2,
 };
-const RESOURCE_NUM: number = 3;
+const RESOURCE_NUM: number = 6;
 

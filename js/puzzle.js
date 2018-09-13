@@ -17,7 +17,7 @@ var Puzzle = /** @class */ (function (_super) {
     function Puzzle(_game) {
         var _this = _super.call(this, _game) || this;
         _this.ui = new PuzzleUI(_this);
-        Puzzle.UI_HEIGHT = height / 4;
+        Puzzle.UI_HEIGHT = height / 5;
         // フィールドの初期化
         _this.field = new Array();
         for (var y = 0; y < Puzzle.STAGE_HEIGHT; y++) {
@@ -109,12 +109,7 @@ var Puzzle = /** @class */ (function (_super) {
             }
             // Cキーで，ブロックが接地していれば固定する
             if (Input.getKeyDown('C')) {
-                var dropVec = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
-                if (this.collisionBlock(dropVec) == true) {
-                    this.setBlock();
-                    this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
-                    this.fixPosition();
-                }
+                this.fixBlock();
             }
         }
         if (!this.moveVec.equal(new Vec4(null))) {
@@ -134,6 +129,24 @@ var Puzzle = /** @class */ (function (_super) {
     Puzzle.prototype.draw2D = function () {
         ortho(-width / 2, width / 2, -height / 2, height / 2, 0, 2000);
         this.ui.draw();
+        // デバッグ用,クリック情報の描画
+        push();
+        if (Input.MouseDown) {
+            fill(255, 0, 0);
+            noStroke();
+            ellipse(Input.MousePos.x, Input.MousePos.y, 15, 15);
+        }
+        else if (Input.MousePress) {
+            fill(255);
+            noStroke();
+            ellipse(Input.MousePos.x, Input.MousePos.y, 15, 15);
+            fill(255, 0, 0);
+            ellipse(Input.ClickPos.x, Input.ClickPos.y, 10, 10);
+            noFill();
+            stroke(255);
+            line(Input.ClickPos.x, Input.ClickPos.y, Input.MousePos.x, Input.MousePos.y);
+        }
+        pop();
         // canvas2D.text("hoge", 0, 0);
     };
     Puzzle.prototype.draw3D = function () {
@@ -288,6 +301,15 @@ var Puzzle = /** @class */ (function (_super) {
     // カーソル位置を初期化
     Puzzle.prototype.fixPosition = function () {
         this.position.set(Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), 0, Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), Math.floor(Puzzle.STAGE_WIDTH / 2 - 1));
+    };
+    // ブロック設置処理
+    Puzzle.prototype.fixBlock = function () {
+        var dropVec = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
+        if (this.collisionBlock(dropVec) == true) {
+            this.setBlock();
+            this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
+            this.fixPosition();
+        }
     };
     // ブロックとフィールドの接触判定
     Puzzle.prototype.collisionBlock = function (position) {

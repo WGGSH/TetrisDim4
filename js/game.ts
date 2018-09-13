@@ -26,6 +26,8 @@ class Game {
     this.sceneList[this.currentScene].draw3D();
     pop();
 
+    
+
     // シーンが変更されるなら，次のシーンを初期化する
     if (this.nextScene != this.currentScene) {
       this.currentScene = this.nextScene;

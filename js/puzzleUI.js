@@ -2,6 +2,7 @@
 var PuzzleUI = /** @class */ (function () {
     function PuzzleUI(_puzzle) {
         this.puzzle = _puzzle;
+        this.rotateFlag = false;
     }
     PuzzleUI.prototype.initialize = function () {
     };
@@ -59,6 +60,21 @@ var PuzzleUI = /** @class */ (function () {
                     this.puzzle.MoveVec.set(0, (i * 2 - 1), 0, 0);
                 }
             }
+            // 固定ボタン
+            topPos.set(width / 2 - Puzzle.UI_HEIGHT / 3 * 4, height - Puzzle.UI_HEIGHT);
+            bottomPos.set(width / 2 - Puzzle.UI_HEIGHT / 6 * 5, height - Puzzle.UI_HEIGHT / 2);
+            // line(topPos.x, topPos.y, bottomPos.x, bottomPos.y);
+            // rect(topPos.x, topPos.y, bottomPos.x - topPos.x, bottomPos.y - topPos.y);
+            if (mosuePos.x >= topPos.x && mosuePos.x <= bottomPos.x && mosuePos.y >= topPos.y && mosuePos.y <= bottomPos.y) {
+                this.puzzle.fixBlock();
+            }
+            // 回転ボタン
+            topPos.set(width / 2 - Puzzle.UI_HEIGHT / 3 * 4, height - Puzzle.UI_HEIGHT / 2);
+            bottomPos.set(width / 2 - Puzzle.UI_HEIGHT / 6 * 5, height);
+            rect(topPos.x, topPos.y, bottomPos.x - topPos.x, bottomPos.y - topPos.y);
+            if (mosuePos.x >= topPos.x && mosuePos.x <= bottomPos.x && mosuePos.y >= topPos.y && mosuePos.y <= bottomPos.y) {
+                this.rotateFlag = !this.rotateFlag;
+            }
         }
     };
     PuzzleUI.prototype.draw = function () {
@@ -69,10 +85,10 @@ var PuzzleUI = /** @class */ (function () {
         translate(0, 0, 400);
         // 背景色
         fill(64, 64, 64);
-        // rect(0, height / 4 * 3, width, height / 4, 1, 1);
+        rect(0, height - Puzzle.UI_HEIGHT, width, Puzzle.UI_HEIGHT, 1, 1);
         // 4方向矢印の描画
         push();
-        translate(width / 2, height / 8 * 7);
+        translate(width / 2, height - Puzzle.UI_HEIGHT / 2);
         for (var i = 0; i < 4; i++) {
             push();
             rotate(radians(i * 90 - 60 * this.puzzle.Position.w - 60) - Camera.AngleX);
@@ -87,7 +103,7 @@ var PuzzleUI = /** @class */ (function () {
         pop();
         // 回転ボタンの描画
         push();
-        translate(width / 2, height / 8 * 7);
+        translate(width / 2, height - Puzzle.UI_HEIGHT / 2);
         for (var i = 0; i < 2; i++) {
             push();
             rotate(radians(i * 180));
@@ -99,7 +115,7 @@ var PuzzleUI = /** @class */ (function () {
         pop();
         // 上下移動ボタンの描画
         push();
-        translate(width / 2 + Puzzle.UI_HEIGHT, height / 8 * 7);
+        translate(width / 2 + Puzzle.UI_HEIGHT, height - Puzzle.UI_HEIGHT / 2);
         for (var i = 0; i < 2; i++) {
             push();
             rotate(radians(i * 180));
@@ -108,6 +124,18 @@ var PuzzleUI = /** @class */ (function () {
             plane(Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 2.5);
             pop();
         }
+        pop();
+        // 固定ボタン
+        push();
+        translate(width / 2 - Puzzle.UI_HEIGHT / 12 * 12, height - Puzzle.UI_HEIGHT / 4 * 3);
+        texture(Resource.getResource(RESOURCE_ID.BUTTON_FIX));
+        plane(Puzzle.UI_HEIGHT / 4, Puzzle.UI_HEIGHT / 4);
+        pop();
+        // 回転ボタン
+        push();
+        translate(width / 2 - Puzzle.UI_HEIGHT / 12 * 12, height - Puzzle.UI_HEIGHT / 4 * 1);
+        texture(Resource.getResource(this.rotateFlag == false ? RESOURCE_ID.BUTTON_ROTATE : RESOURCE_ID.BUTTON_ROTATE2));
+        plane(Puzzle.UI_HEIGHT / 4, Puzzle.UI_HEIGHT / 4);
         pop();
     };
     return PuzzleUI;
