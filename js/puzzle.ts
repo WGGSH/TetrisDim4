@@ -77,7 +77,7 @@ class Puzzle extends Scene {
 
     // フィールドの初期化
     Puzzle.stageMethod(this.field, (y: number, w: number, z: number, x: number) => {
-      if (x == 0 || x == Puzzle.STAGE_WIDTH - 1 || y == 0 || y == Puzzle.STAGE_HEIGHT - 1 || z == 0 || z == Puzzle.STAGE_WIDTH - 1 || w == 0 || w == Puzzle.STAGE_WIDTH - 1) {
+      if (x == 0 || x == Puzzle.STAGE_WIDTH - 1 || /*y == 0 ||*/ y == Puzzle.STAGE_HEIGHT - 1 || z == 0 || z == Puzzle.STAGE_WIDTH - 1 || w == 0 || w == Puzzle.STAGE_WIDTH - 1) {
         this.field[y][w][z][x] = 9;
       }
     });
@@ -87,6 +87,8 @@ class Puzzle extends Scene {
 
     // カメラの初期化
     Camera.initialize();
+
+    // 仮のブロック設置
   }
 
   public update(): void {
@@ -120,9 +122,6 @@ class Puzzle extends Scene {
         this.moveVec.set(0, -1, 0, 0);
       }
       // 回転
-      if (Input.getKeyDown('L')) {
-        
-      }
 
       // Cキーで，ブロックが接地していれば固定する
       if (Input.getKeyDown('C')) {
@@ -340,7 +339,7 @@ class Puzzle extends Scene {
 
   // カーソル位置を初期化
   private fixPosition(): void{
-    this.position.set(Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), 0, Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), Math.floor(Puzzle.STAGE_WIDTH / 2 - 1));
+    this.position.set(Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), 1, Math.floor(Puzzle.STAGE_WIDTH / 2 - 1), Math.floor(Puzzle.STAGE_WIDTH / 2 - 1));
   }
 
   // ブロック設置処理
@@ -348,9 +347,48 @@ class Puzzle extends Scene {
     let dropVec: Vec4 = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
     if (this.collisionBlock(this.currentBlock, dropVec) == true) {
       this.setBlock();
+
+      // ブロックを消す
+      this.deleteBlock();
+
       this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
       this.fixPosition();
     }
+  }
+
+  private deleteBlock(): void{
+    let flag: boolean = true;
+    while (flag == true) {
+      flag = false;
+      for (let y: number = Puzzle.FIELD_HEIGHT_INDEX_MAX - 1; y >= Puzzle.FIELD_INDEX_MIN; y--){
+        let count: number = 0;
+        for (let w: number = Puzzle.FIELD_INDEX_MIN; w < Puzzle.FIELD_WIDTH_INDEX_MAX; w++){
+          for (let z: number = Puzzle.FIELD_INDEX_MIN; z < Puzzle.FIELD_WIDTH_INDEX_MAX; z++){
+            for (let x: number = Puzzle.FIELD_INDEX_MIN; x < Puzzle.FIELD_WIDTH_INDEX_MAX; x++){
+              if (this.field[y][w][z][x] != 0) {
+                count++;
+                console.log(y, w, z, x);
+              }
+            }
+          }
+        }
+        // カウント数が最大値なら，その段を削除する
+        console.log(count);
+        if (count == Puzzle.FIELD_WIDTH * Puzzle.FIELD_WIDTH * Puzzle.FIELD_WIDTH) {
+          for (let y2: number = y; y2 >= Puzzle.FIELD_INDEX_MIN + 1; y2--){
+            for (let w: number = Puzzle.FIELD_INDEX_MIN; w < Puzzle.FIELD_WIDTH_INDEX_MAX; w++) {
+              for (let z: number = Puzzle.FIELD_INDEX_MIN; z < Puzzle.FIELD_WIDTH_INDEX_MAX; z++) {
+                for (let x: number = Puzzle.FIELD_INDEX_MIN; x < Puzzle.FIELD_WIDTH_INDEX_MAX; x++) {
+                  this.field[y2][w][z][x] = this.field[y2 - 1][w][z][x];
+                }
+              }
+            }
+          }
+          y++;
+        }
+      }
+    }
+    
   }
 
   // ブロックとフィールドの接触判定
