@@ -94,6 +94,7 @@ class Puzzle extends Scene {
     this.ui.update();
 
     if (keyIsPressed) {
+      // 移動
       if (Input.getKeyDown('A')) {
         this.moveVec.set(-1, 0, 0, 0);
       }
@@ -118,6 +119,10 @@ class Puzzle extends Scene {
       if (Input.getKeyDown('Z')) {
         this.moveVec.set(0, -1, 0, 0);
       }
+      // 回転
+      if (Input.getKeyDown('L')) {
+        
+      }
 
       // Cキーで，ブロックが接地していれば固定する
       if (Input.getKeyDown('C')) {
@@ -128,7 +133,7 @@ class Puzzle extends Scene {
     if (!this.moveVec.equal(new Vec4(null))) {
       // 移動先にブロックがある場合,移動を無効化する
       let targetPos: Vec4 = new Vec4(this.position.x + this.moveVec.x, this.position.y + this.moveVec.y, this.position.z + this.moveVec.z, this.position.w + this.moveVec.w);
-      if (this.collisionBlock(targetPos) == false) {
+      if (this.collisionBlock(this.currentBlock, targetPos) == false) {
         this.position.set(targetPos.x, targetPos.y, targetPos.z, targetPos.w);
       }
     }
@@ -242,7 +247,7 @@ class Puzzle extends Scene {
     let dropDist: number = 0;
     for (let y = this.position.y; y < Puzzle.STAGE_HEIGHT; y++){
       dropVec.set(this.position.x, y, this.position.z, this.position.w);
-      if (this.collisionBlock(dropVec) == true) {
+      if (this.collisionBlock(this.currentBlock, dropVec) == true) {
         dropDist = y - 1;
         break;
       }
@@ -341,7 +346,7 @@ class Puzzle extends Scene {
   // ブロック設置処理
   public fixBlock(): void{
     let dropVec: Vec4 = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
-    if (this.collisionBlock(dropVec) == true) {
+    if (this.collisionBlock(this.currentBlock, dropVec) == true) {
       this.setBlock();
       this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
       this.fixPosition();
@@ -349,11 +354,11 @@ class Puzzle extends Scene {
   }
 
   // ブロックとフィールドの接触判定
-  private collisionBlock(position: Vec4): boolean{
+  private collisionBlock(block: number[][][][], position: Vec4): boolean {
     let flag: boolean = false;
-    Block.blockMethod(this.currentBlock, (y: number, w: number, z: number, x: number) => {
+    Block.blockMethod(block, (y: number, w: number, z: number, x: number) => {
       // ブロックのないマスは無視
-      if (this.currentBlock[y][w][z][x] == 0) {
+      if (block[y][w][z][x] == 0) {
         return;
       }
       // 移動先がフィールド外の場合も無視
@@ -369,6 +374,92 @@ class Puzzle extends Scene {
       }
     });
     return flag;
+  }
+
+  public blockRotate(axis: Axis4): void{
+    let val: number = -1;
+    let rotBlock: number[][][][] = new Array(Block.BLOCK_WIDTH);
+    for (let y: number = 0; y < Block.BLOCK_WIDTH; y++){
+      rotBlock[y] = new Array(Block.BLOCK_WIDTH);
+      for (let w: number = 0; w < Block.BLOCK_WIDTH; w++){
+        rotBlock[y][w] = new Array(Block.BLOCK_WIDTH);
+        for (let z: number = 0; z < Block.BLOCK_WIDTH; z++){
+          rotBlock[y][w][z] = new Array(Block.BLOCK_WIDTH);
+          for (let x: number = 0; x < Block.BLOCK_WIDTH; x++){
+            rotBlock[y][w][z][x] = 0;
+          }
+        }
+      }
+    }
+
+    if (axis.xy == -1) val = 0;
+    if (axis.xy == 1) val = 1;
+    if (axis.xz == -1) val = 2;
+    if (axis.xz == 1) val = 3;
+    if (axis.xw == -1) val = 4;
+    if (axis.xw == 1) val = 5;
+    if (axis.yz == -1) val = 6;
+    if (axis.yz == 1) val = 7;
+    if (axis.yw == -1) val = 8;
+    if (axis.yw == 1) val = 9;
+    if (axis.zw == -1) val = 10;
+    if (axis.zw == 1) val = 11;
+
+    Block.blockMethod(rotBlock, (y: number, w: number, z: number, x: number) => {
+      if (this.currentBlock[y][w][z][x] == 0) {
+        return;
+      }
+      // rotBlock[y][w][z][x] = this.currentBlock[y][w][z][x];
+      switch (val) {
+        case 0: // XY-1
+          rotBlock[y][z][Block.BLOCK_WIDTH - 1 - w][x] = this.currentBlock[y][w][z][x];
+          break;
+        case 1: // XY-2
+          rotBlock[y][Block.BLOCK_WIDTH - 1 - z][w][x] = this.currentBlock[y][w][z][x];
+          break;
+        case 2: // XZ-1
+          rotBlock[w][Block.BLOCK_WIDTH - 1 - y][z][x] = this.currentBlock[y][w][z][x];
+          break;
+        case 3: // XZ-2
+          rotBlock[Block.BLOCK_WIDTH - 1 - w][y][z][x] = this.currentBlock[y][w][z][x];
+          break;
+        case 4: // XW-1
+          rotBlock[z][w][Block.BLOCK_WIDTH - 1 - y][x] = this.currentBlock[y][w][z][x];
+          break;
+        case 5: // XW-2
+          rotBlock[Block.BLOCK_WIDTH - 1 - z][w][y][x] = this.currentBlock[y][w][z][x];
+          break;
+        case 6: // YZ-1
+          rotBlock[y][x][z][Block.BLOCK_WIDTH - 1 - w] = this.currentBlock[y][w][z][x];
+          break;
+        case 7: // YZ-2
+          rotBlock[y][Block.BLOCK_WIDTH - 1 - x][z][w] = this.currentBlock[y][w][z][x];
+          break;
+        case 8: // YW-1
+          rotBlock[y][w][x][Block.BLOCK_WIDTH - 1 - z] = this.currentBlock[y][w][z][x];
+          break;
+        case 9: // YW-2
+          rotBlock[y][w][Block.BLOCK_WIDTH - 1 - x][z] = this.currentBlock[y][w][z][x];
+          break;
+        case 10: // ZW-1
+          rotBlock[x][w][z][Block.BLOCK_WIDTH - 1 - y] = this.currentBlock[y][w][z][x];
+          break;
+        case 11: // ZW-2
+          rotBlock[Block.BLOCK_WIDTH - 1 - x][w][z][y] = this.currentBlock[y][w][z][x];
+          break;
+      }
+    });
+
+    // 回転後のブロックがフィールドに重なっていないか確認
+    if (this.collisionBlock(rotBlock, this.position) == true) {
+      return;
+    }
+
+    // 回転後のブロックを現在のブロックに反映する
+    Block.blockMethod(this.currentBlock, (y: number, w: number, z: number, x: number) => {
+      this.currentBlock[y][w][z][x] = rotBlock[y][w][z][x];
+    });
+
   }
 
 }

@@ -83,6 +83,7 @@ var Puzzle = /** @class */ (function (_super) {
         this.moveVec.set(0, 0, 0, 0);
         this.ui.update();
         if (keyIsPressed) {
+            // 移動
             if (Input.getKeyDown('A')) {
                 this.moveVec.set(-1, 0, 0, 0);
             }
@@ -107,6 +108,9 @@ var Puzzle = /** @class */ (function (_super) {
             if (Input.getKeyDown('Z')) {
                 this.moveVec.set(0, -1, 0, 0);
             }
+            // 回転
+            if (Input.getKeyDown('L')) {
+            }
             // Cキーで，ブロックが接地していれば固定する
             if (Input.getKeyDown('C')) {
                 this.fixBlock();
@@ -115,7 +119,7 @@ var Puzzle = /** @class */ (function (_super) {
         if (!this.moveVec.equal(new Vec4(null))) {
             // 移動先にブロックがある場合,移動を無効化する
             var targetPos = new Vec4(this.position.x + this.moveVec.x, this.position.y + this.moveVec.y, this.position.z + this.moveVec.z, this.position.w + this.moveVec.w);
-            if (this.collisionBlock(targetPos) == false) {
+            if (this.collisionBlock(this.currentBlock, targetPos) == false) {
                 this.position.set(targetPos.x, targetPos.y, targetPos.z, targetPos.w);
             }
         }
@@ -217,7 +221,7 @@ var Puzzle = /** @class */ (function (_super) {
         var dropDist = 0;
         for (var y = this.position.y; y < Puzzle.STAGE_HEIGHT; y++) {
             dropVec.set(this.position.x, y, this.position.z, this.position.w);
-            if (this.collisionBlock(dropVec) == true) {
+            if (this.collisionBlock(this.currentBlock, dropVec) == true) {
                 dropDist = y - 1;
                 break;
             }
@@ -305,19 +309,19 @@ var Puzzle = /** @class */ (function (_super) {
     // ブロック設置処理
     Puzzle.prototype.fixBlock = function () {
         var dropVec = new Vec4(this.position.x, this.position.y + 1, this.position.z, this.position.w);
-        if (this.collisionBlock(dropVec) == true) {
+        if (this.collisionBlock(this.currentBlock, dropVec) == true) {
             this.setBlock();
             this.createBlock(Math.floor(random(0, Block.BLOCK_TYPE_MAX)));
             this.fixPosition();
         }
     };
     // ブロックとフィールドの接触判定
-    Puzzle.prototype.collisionBlock = function (position) {
+    Puzzle.prototype.collisionBlock = function (block, position) {
         var _this = this;
         var flag = false;
-        Block.blockMethod(this.currentBlock, function (y, w, z, x) {
+        Block.blockMethod(block, function (y, w, z, x) {
             // ブロックのないマスは無視
-            if (_this.currentBlock[y][w][z][x] == 0) {
+            if (block[y][w][z][x] == 0) {
                 return;
             }
             // 移動先がフィールド外の場合も無視
@@ -332,6 +336,99 @@ var Puzzle = /** @class */ (function (_super) {
             }
         });
         return flag;
+    };
+    Puzzle.prototype.blockRotate = function (axis) {
+        var _this = this;
+        var val = -1;
+        var rotBlock = new Array(Block.BLOCK_WIDTH);
+        for (var y = 0; y < Block.BLOCK_WIDTH; y++) {
+            rotBlock[y] = new Array(Block.BLOCK_WIDTH);
+            for (var w = 0; w < Block.BLOCK_WIDTH; w++) {
+                rotBlock[y][w] = new Array(Block.BLOCK_WIDTH);
+                for (var z = 0; z < Block.BLOCK_WIDTH; z++) {
+                    rotBlock[y][w][z] = new Array(Block.BLOCK_WIDTH);
+                    for (var x = 0; x < Block.BLOCK_WIDTH; x++) {
+                        rotBlock[y][w][z][x] = 0;
+                    }
+                }
+            }
+        }
+        if (axis.xy == -1)
+            val = 0;
+        if (axis.xy == 1)
+            val = 1;
+        if (axis.xz == -1)
+            val = 2;
+        if (axis.xz == 1)
+            val = 3;
+        if (axis.xw == -1)
+            val = 4;
+        if (axis.xw == 1)
+            val = 5;
+        if (axis.yz == -1)
+            val = 6;
+        if (axis.yz == 1)
+            val = 7;
+        if (axis.yw == -1)
+            val = 8;
+        if (axis.yw == 1)
+            val = 9;
+        if (axis.zw == -1)
+            val = 10;
+        if (axis.zw == 1)
+            val = 11;
+        Block.blockMethod(rotBlock, function (y, w, z, x) {
+            if (_this.currentBlock[y][w][z][x] == 0) {
+                return;
+            }
+            // rotBlock[y][w][z][x] = this.currentBlock[y][w][z][x];
+            switch (val) {
+                case 0: // XY-1
+                    rotBlock[y][z][Block.BLOCK_WIDTH - 1 - w][x] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 1: // XY-2
+                    rotBlock[y][Block.BLOCK_WIDTH - 1 - z][w][x] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 2: // XZ-1
+                    rotBlock[w][Block.BLOCK_WIDTH - 1 - y][z][x] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 3: // XZ-2
+                    rotBlock[Block.BLOCK_WIDTH - 1 - w][y][z][x] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 4: // XW-1
+                    rotBlock[z][w][Block.BLOCK_WIDTH - 1 - y][x] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 5: // XW-2
+                    rotBlock[Block.BLOCK_WIDTH - 1 - z][w][y][x] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 6: // YZ-1
+                    rotBlock[y][x][z][Block.BLOCK_WIDTH - 1 - w] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 7: // YZ-2
+                    rotBlock[y][Block.BLOCK_WIDTH - 1 - x][z][w] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 8: // YW-1
+                    rotBlock[y][w][x][Block.BLOCK_WIDTH - 1 - z] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 9: // YW-2
+                    rotBlock[y][w][Block.BLOCK_WIDTH - 1 - x][z] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 10: // ZW-1
+                    rotBlock[x][w][z][Block.BLOCK_WIDTH - 1 - y] = _this.currentBlock[y][w][z][x];
+                    break;
+                case 11: // ZW-2
+                    rotBlock[Block.BLOCK_WIDTH - 1 - x][w][z][y] = _this.currentBlock[y][w][z][x];
+                    break;
+            }
+        });
+        // 回転後のブロックがフィールドに重なっていないか確認
+        if (this.collisionBlock(rotBlock, this.position) == true) {
+            return;
+        }
+        // 回転後のブロックを現在のブロックに反映する
+        Block.blockMethod(this.currentBlock, function (y, w, z, x) {
+            _this.currentBlock[y][w][z][x] = rotBlock[y][w][z][x];
+        });
     };
     Puzzle.FIELD_WIDTH = 5; // フィールドの高さ以外の幅
     Puzzle.STAGE_WIDTH = Puzzle.FIELD_WIDTH + 2;

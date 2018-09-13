@@ -26,21 +26,42 @@ class PuzzleUI{
         );
         // ellipse(targetPos.x, targetPos.y, Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
         if (mosuePos.distance(targetPos) < Puzzle.UI_HEIGHT / 6) {
-          switch (i) {
-            case 0:
-              this.puzzle.MoveVec.set(0, 0, -1, 0);
-              break;
-            case 1:
-              this.puzzle.MoveVec.set(1, 0, 0, 0);
-              break;
-            case 2:
-              this.puzzle.MoveVec.set(0, 0, 1, 0);
-              break;
-            case 3:
-              this.puzzle.MoveVec.set(-1, 0, 0, 0);
-              break;
-            default:
-              break;
+          if (this.rotateFlag == false) {
+            // 移動時
+            switch (i) {
+              case 0:
+                this.puzzle.MoveVec.set(0, 0, -1, 0);
+                break;
+              case 1:
+                this.puzzle.MoveVec.set(1, 0, 0, 0);
+                break;
+              case 2:
+                this.puzzle.MoveVec.set(0, 0, 1, 0);
+                break;
+              case 3:
+                this.puzzle.MoveVec.set(-1, 0, 0, 0);
+                break;
+              default:
+                break;
+            }
+          } else {
+            // 回転時
+            switch (i) {
+              case 0:
+                this.puzzle.blockRotate(new Axis4(0, 0, -1, 0, 0, 0));
+                break;
+              case 1:
+                this.puzzle.blockRotate(new Axis4(0, 0, 0, 0, 0, -1));
+                break;
+              case 2:
+                this.puzzle.blockRotate(new Axis4(0, 0, 1, 0, 0, 0));
+                break;
+              case 3:
+                this.puzzle.blockRotate(new Axis4(0, 0, 0, 0, 0, 1));
+                break;
+              default:
+                break;
+            }
           }
         }
       }
@@ -63,7 +84,13 @@ class PuzzleUI{
         );
         // line(topPos.x, topPos.y, buttonPos.x, buttonPos.y);
         if (mosuePos.x >= topPos.x && mosuePos.x <= bottomPos.x && mosuePos.y >= topPos.y && mosuePos.y <= bottomPos.y) {
-          this.puzzle.MoveVec.set(0, 0, 0, -(i * 2 - 1));
+          if (this.rotateFlag == false) {
+            // 移動
+            this.puzzle.MoveVec.set(0, 0, 0, -(i * 2 - 1));
+          } else {
+            // 回転
+            this.puzzle.blockRotate(new Axis4(0, 0, 0, 0, -(i * 2 - 1), 0));
+          }
         }
       }
 
@@ -80,7 +107,17 @@ class PuzzleUI{
         );
         // line(topPos.x, topPos.y, bottomPos.x, bottomPos.y);
         if (mosuePos.x >= topPos.x && mosuePos.x <= bottomPos.x && mosuePos.y >= topPos.y && mosuePos.y <= bottomPos.y) {
-          this.puzzle.MoveVec.set(0, (i * 2 - 1), 0, 0);
+          if (this.rotateFlag == false) {
+            // 移動
+            this.puzzle.MoveVec.set(0, (i * 2 - 1), 0, 0);
+          } else {
+            // 回転
+            if(i==0){
+              this.puzzle.blockRotate(new Axis4(1, 0, 0, 0, 0, 0));
+            } else {
+              this.puzzle.blockRotate(new Axis4(0, 1, 0, 0, 0, 0));
+            }
+          }
         }
       }
 
