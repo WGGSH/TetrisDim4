@@ -83,6 +83,10 @@ class Input{
     return Input.preMousePos;
   }
 
+  static get ClickPos(): Vec2{
+    return Input.clickedPos;
+  }
+
   public static getKey(_key: string) : boolean{
     return Input.keyPressCount[_key.charCodeAt(0)] >= 2;
   }

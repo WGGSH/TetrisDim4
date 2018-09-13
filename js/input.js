@@ -84,6 +84,13 @@ var Input = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(Input, "ClickPos", {
+        get: function () {
+            return Input.clickedPos;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Input.getKey = function (_key) {
         return Input.keyPressCount[_key.charCodeAt(0)] >= 2;
     };

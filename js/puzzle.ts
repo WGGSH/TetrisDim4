@@ -16,10 +16,14 @@ class Puzzle extends Scene {
   private position: Vec4; // 移動中のブロックの位置
 
   static readonly BLOCK_DRAW_SIZE: number = 10; // 描画時のブロックの大きさ
-  static readonly W_LENGTH: number = 16*Puzzle.FIELD_WIDTH; // W用のずらし幅
+  static readonly W_LENGTH: number = 16 * Puzzle.FIELD_WIDTH; // W用のずらし幅
+
+  static UI_HEIGHT: number; //UI部の高さ(コンストラクタで初期化)
 
   constructor(_game: Game) {
     super(_game);
+
+    Puzzle.UI_HEIGHT = height / 4;
 
     // フィールドの初期化
     this.field = new Array();
@@ -147,11 +151,12 @@ class Puzzle extends Scene {
     translate(width / 2, height / 8 * 7);
     for (let i: number = 0; i < 4; i++) {
       push();
-      rotate(radians(i * 90 + 36 * this.position.w) - Camera.AngleX);
-      console.log(i * 90 + 75 * this.position.w);
-      translate(40, 0);
+      rotate(radians(i * 90 - 60 * this.position.w - 60)-Camera.AngleX);
+      // console.log(i * 90 + 75 * this.position.w);
+      translate(Puzzle.UI_HEIGHT / 3, 0);
       texture(Resource.getResource(RESOURCE_ID.BUTTON_ARROW));
-      plane(50, 50);
+      plane(Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
+      ellipse(0, 0, Puzzle.UI_HEIGHT, Puzzle.UI_HEIGHT);
       pop();
     }
     // image(Resource.getResource(RESOURCE_ID.BUTTON_ARROW),0,0);

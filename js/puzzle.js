@@ -16,6 +16,7 @@ var Puzzle = /** @class */ (function (_super) {
     __extends(Puzzle, _super);
     function Puzzle(_game) {
         var _this = _super.call(this, _game) || this;
+        Puzzle.UI_HEIGHT = height / 4;
         // フィールドの初期化
         _this.field = new Array();
         for (var y = 0; y < Puzzle.STAGE_HEIGHT; y++) {
@@ -126,11 +127,12 @@ var Puzzle = /** @class */ (function (_super) {
         translate(width / 2, height / 8 * 7);
         for (var i = 0; i < 4; i++) {
             push();
-            rotate(radians(i * 90 + 36 * this.position.w) - Camera.AngleX);
-            console.log(i * 90 + 75 * this.position.w);
-            translate(40, 0);
+            rotate(radians(i * 90 - 60 * this.position.w - 60) - Camera.AngleX);
+            // console.log(i * 90 + 75 * this.position.w);
+            translate(Puzzle.UI_HEIGHT / 3, 0);
             texture(Resource.getResource(RESOURCE_ID.BUTTON_ARROW));
-            plane(50, 50);
+            plane(Puzzle.UI_HEIGHT / 3, Puzzle.UI_HEIGHT / 3);
+            ellipse(0, 0, Puzzle.UI_HEIGHT, Puzzle.UI_HEIGHT);
             pop();
         }
         // image(Resource.getResource(RESOURCE_ID.BUTTON_ARROW),0,0);

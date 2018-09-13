@@ -6,11 +6,6 @@ class Resource{
     Resource.RESOURCES = new Array(RESOURCE_NUM);
     Resource.RESOURCE_PATH = new Array(RESOURCE_NUM);
 
-    // 初めは全てnull初期化する
-    for (let i: number = 0; i < RESOURCE_NUM; i++){
-      console.log(Resource.RESOURCES[i]);
-    }
-
     // パスの設定
     Resource.RESOURCE_PATH[RESOURCE_ID.BUTTON_ARROW] = 'Resources/buttonArrow.png';
   }

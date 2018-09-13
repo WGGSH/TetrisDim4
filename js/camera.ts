@@ -17,8 +17,11 @@ class Camera{
 
   public static update(): void{
     if (Input.MousePress) {
-      this.angleX += (Input.MousePos.x - Input.PreMousePos.x) * Camera.ROTATE_SPEED;
-      this.angleY += (Input.MousePos.y - Input.PreMousePos.y) * Camera.ROTATE_SPEED;
+      // クリックした箇所がUI部以外ならカメラアングルを変更する処理を行う
+      if (Input.ClickPos.y < height / 4 * 3) {
+        this.angleX += (Input.MousePos.x - Input.PreMousePos.x) * Camera.ROTATE_SPEED;
+        this.angleY += (Input.MousePos.y - Input.PreMousePos.y) * Camera.ROTATE_SPEED;
+      }
 
       if (Camera.angleY < -Math.PI / 2) {
         Camera.angleY = -Math.PI / 2;
